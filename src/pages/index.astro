@@ -112,9 +112,11 @@ function formatDate(dateStr: string): string {
                       <button class="size-toggle__btn" data-size="large">L</button>
                     </span>
                   </h2>
-                  <p class="story__summary" data-size="small" set:html={renderSummary(sum.small)} />
-                  <p class="story__summary" data-size="medium" set:html={renderSummary(sum.medium)} />
-                  <p class="story__summary" data-size="large" set:html={renderSummary(sum.large)} />
+                  <div class="story__summaries">
+                    <p class="story__summary" data-size="small" set:html={renderSummary(sum.small)} />
+                    <p class="story__summary" data-size="medium" set:html={renderSummary(sum.medium)} />
+                    <p class="story__summary" data-size="large" set:html={renderSummary(sum.large)} />
+                  </div>
                   <div class="story__meta">
                     <a href={story.hnUrl} rel="noopener" class="story__meta-link">
                       Submitted {story.submittedAt ? formatTime(story.submittedAt) : ''} by {story.author}
@@ -146,7 +148,7 @@ function formatDate(dateStr: string): string {
   const SIZES = ['small', 'medium', 'large'];
 
   function currentSize(article: Element): string {
-    const visible = article.querySelector('.story__summary:not([style*="display: none"])') as HTMLElement | null;
+    const visible = article.querySelector('.story__summary.visible') as HTMLElement | null;
     return visible?.dataset.size ?? DEFAULT_SIZE;
   }
 
@@ -156,7 +158,14 @@ function formatDate(dateStr: string): string {
 
   function setStorySize(article: Element, size: string) {
     article.querySelectorAll('.story__summary').forEach((el) => {
-      (el as HTMLElement).style.display = (el as HTMLElement).dataset.size === size ? '' : 'none';
+      const h = el as HTMLElement;
+      if (h.dataset.size === size) {
+        h.classList.add('visible');
+        h.classList.remove('hidden');
+      } else {
+        h.classList.remove('visible');
+        h.classList.add('hidden');
+      }
     });
     const toggle = article.querySelector('.size-toggle--inline');
     if (toggle) {
@@ -199,10 +208,9 @@ function formatDate(dateStr: string): string {
   });
 
   // Click summary text to cycle size
-  document.querySelectorAll('.story__summary').forEach((el) => {
-    (el as HTMLElement).style.cursor = 'pointer';
-    el.addEventListener('click', () => {
-      const article = el.closest('.story')!;
+  document.querySelectorAll('.story__summaries').forEach((wrapper) => {
+    wrapper.addEventListener('click', () => {
+      const article = wrapper.closest('.story')!;
       setStorySize(article, nextSize(currentSize(article)));
     });
   });

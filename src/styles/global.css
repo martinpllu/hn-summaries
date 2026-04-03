@@ -164,11 +164,29 @@ a:hover {
   font-weight: 400;
 }
 
+.story__summaries {
+  display: grid;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+}
+
 .story__summary {
+  grid-area: 1 / 1;
   font-size: 0.95rem;
   line-height: 1.7;
   color: #333;
-  margin-bottom: 0.75rem;
+  transition: opacity 0.3s ease;
+}
+
+.story__summary.hidden {
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.story__summary.visible {
+  opacity: 1;
 }
 
 .story__meta {
