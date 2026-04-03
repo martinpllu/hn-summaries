@@ -143,6 +143,16 @@ function formatDate(dateStr: string): string {
 
 <script>
   const DEFAULT_SIZE = 'medium';
+  const SIZES = ['small', 'medium', 'large'];
+
+  function currentSize(article: Element): string {
+    const visible = article.querySelector('.story__summary:not([style*="display: none"])') as HTMLElement | null;
+    return visible?.dataset.size ?? DEFAULT_SIZE;
+  }
+
+  function nextSize(size: string): string {
+    return SIZES[(SIZES.indexOf(size) + 1) % SIZES.length];
+  }
 
   function setStorySize(article: Element, size: string) {
     article.querySelectorAll('.story__summary').forEach((el) => {
@@ -185,6 +195,15 @@ function formatDate(dateStr: string): string {
       if (!btn) return;
       const article = btn.closest('.story')!;
       setStorySize(article, btn.dataset.size!);
+    });
+  });
+
+  // Click summary text to cycle size
+  document.querySelectorAll('.story__summary').forEach((el) => {
+    (el as HTMLElement).style.cursor = 'pointer';
+    el.addEventListener('click', () => {
+      const article = el.closest('.story')!;
+      setStorySize(article, nextSize(currentSize(article)));
     });
   });
 </script>
