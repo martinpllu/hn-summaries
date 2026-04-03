@@ -1,0 +1,20 @@
+{
+  "name": "hn-summaries",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI-powered summaries of the top Hacker News stories",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "fetch": "tsx scripts/fetch-stories.ts",
+    "deploy:production": "astro build && wrangler pages deploy dist --project-name hn-summaries --branch production --commit-dirty=true"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "astro": "^5.14.6",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.2",
+    "wrangler": "^4.40.2"
+  }
+}

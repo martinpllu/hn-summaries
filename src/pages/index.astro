@@ -1,0 +1,103 @@
+---
+import Base from '../layouts/Base.astro';
+import { readFileSync, existsSync } from 'fs';
+import { join } from 'path';
+
+interface StorySummary {
+  id: number;
+  title: string;
+  url: string;
+  hnUrl: string;
+  author: string;
+  score: number;
+  commentCount: number;
+  summary: string;
+}
+
+interface StoriesData {
+  date: string;
+  generatedAt: string;
+  stories: StorySummary[];
+}
+
+// Read the latest stories data at build time
+const dataPath = join(process.cwd(), 'data', 'latest.json');
+let data: StoriesData | null = null;
+
+if (existsSync(dataPath)) {
+  data = JSON.parse(readFileSync(dataPath, 'utf-8'));
+}
+
+function extractDomain(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return '';
+  }
+}
+
+function formatDate(dateStr: string): string {
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+---
+
+<Base title="HN Summaries">
+  <div class="page">
+    {data ? (
+      <>
+        <header class="masthead">
+          <h1 class="masthead__title">The <em>Hacker</em> Briefing</h1>
+          <div class="masthead__date">{formatDate(data.date)}</div>
+          <div class="masthead__edition">Top {data.stories.length} stories, summarized by AI</div>
+        </header>
+
+        <main>
+          {data.stories.map((story, i) => {
+            const domain = extractDomain(story.url);
+            const isHNPost = story.url.includes('news.ycombinator.com');
+            return (
+              <article class="story">
+                <div class="story__rank">{i + 1}</div>
+                <div class="story__content">
+                  <h2 class="story__title">
+                    <a href={story.url} target="_blank" rel="noopener">
+                      {story.title}
+                    </a>
+                    {!isHNPost && domain && (
+                      <span class="story__domain">({domain})</span>
+                    )}
+                  </h2>
+                  <p class="story__summary">{story.summary}</p>
+                  <div class="story__meta">
+                    <span class="story__meta-item">{story.score} points</span>
+                    <span class="story__meta-item">by {story.author}</span>
+                    <a href={story.hnUrl} target="_blank" rel="noopener" class="story__meta-item">
+                      {story.commentCount} comments
+                    </a>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </main>
+
+        <footer class="footer">
+          Summaries generated with Gemini 3 Flash via OpenRouter.
+          Data from the <a href="https://news.ycombinator.com" target="_blank" rel="noopener">Hacker News API</a>.
+        </footer>
+      </>
+    ) : (
+      <div class="empty">
+        <h1 class="empty__title">No stories yet</h1>
+        <p class="empty__text">Run the fetch script to generate today's summaries:</p>
+        <code class="empty__code">pnpm fetch</code>
+      </div>
+    )}
+  </div>
+</Base>
