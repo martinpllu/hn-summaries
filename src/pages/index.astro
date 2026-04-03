@@ -3,6 +3,12 @@ import Base from '../layouts/Base.astro';
 import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 
+interface SummarySet {
+  small: string;
+  medium: string;
+  large: string;
+}
+
 interface StorySummary {
   id: number;
   title: string;
@@ -11,7 +17,8 @@ interface StorySummary {
   author: string;
   score: number;
   commentCount: number;
-  summary: string;
+  submittedAt?: string;
+  summary: SummarySet | string;
 }
 
 interface StoriesData {
@@ -36,6 +43,27 @@ function extractDomain(url: string): string {
   }
 }
 
+function formatTime(isoStr: string): string {
+  const d = new Date(isoStr);
+  const hours = d.getHours().toString().padStart(2, '0');
+  const minutes = d.getMinutes().toString().padStart(2, '0');
+  return `${d.toLocaleDateString('en-GB', { month: 'short', day: 'numeric' })} at ${hours}:${minutes}`;
+}
+
+function renderSummary(text: string): string {
+  return text.replace(
+    /\[([^\]]+)\]\(([^)]+)\)/g,
+    '<a href="$2" rel="noopener">$1</a>'
+  );
+}
+
+function normaliseSummary(summary: SummarySet | string): SummarySet {
+  if (typeof summary === 'string') {
+    return { small: summary, medium: summary, large: summary };
+  }
+  return summary;
+}
+
 function formatDate(dateStr: string): string {
   const d = new Date(dateStr + 'T00:00:00');
   return d.toLocaleDateString('en-US', {
@@ -54,31 +82,42 @@ function formatDate(dateStr: string): string {
         <header class="masthead">
           <h1 class="masthead__title">The <em>Hacker</em> Briefing</h1>
           <div class="masthead__date">{formatDate(data.date)}</div>
-          <div class="masthead__edition">Top {data.stories.length} stories, summarized by AI</div>
+          <div class="masthead__edition">Top stories from Hacker News, summarised</div>
+          <div class="size-toggle size-toggle--global" data-scope="global">
+            <button class="size-toggle__btn" data-size="small">S</button>
+            <button class="size-toggle__btn active" data-size="medium">M</button>
+            <button class="size-toggle__btn" data-size="large">L</button>
+          </div>
         </header>
 
         <main>
           {data.stories.map((story, i) => {
             const domain = extractDomain(story.url);
             const isHNPost = story.url.includes('news.ycombinator.com');
+            const sum = normaliseSummary(story.summary);
             return (
-              <article class="story">
+              <article class="story" data-story-id={story.id}>
                 <div class="story__rank">{i + 1}</div>
                 <div class="story__content">
                   <h2 class="story__title">
-                    <a href={story.url} target="_blank" rel="noopener">
+                    <a href={story.url} rel="noopener">
                       {story.title}
                     </a>
                     {!isHNPost && domain && (
-                      <span class="story__domain">({domain})</span>
+                      <a href={story.url} rel="noopener" class="story__domain">({domain})</a>
                     )}
+                    <span class="size-toggle size-toggle--inline" data-scope="story">
+                      <button class="size-toggle__btn" data-size="small">S</button>
+                      <button class="size-toggle__btn" data-size="medium">M</button>
+                      <button class="size-toggle__btn" data-size="large">L</button>
+                    </span>
                   </h2>
-                  <p class="story__summary">{story.summary}</p>
+                  <p class="story__summary" data-size="small" set:html={renderSummary(sum.small)} />
+                  <p class="story__summary" data-size="medium" set:html={renderSummary(sum.medium)} />
+                  <p class="story__summary" data-size="large" set:html={renderSummary(sum.large)} />
                   <div class="story__meta">
-                    <span class="story__meta-item">{story.score} points</span>
-                    <span class="story__meta-item">by {story.author}</span>
-                    <a href={story.hnUrl} target="_blank" rel="noopener" class="story__meta-item">
-                      {story.commentCount} comments
+                    <a href={story.hnUrl} rel="noopener" class="story__meta-link">
+                      Submitted {story.submittedAt ? formatTime(story.submittedAt) : ''} by {story.author}
                     </a>
                   </div>
                 </div>
@@ -89,7 +128,7 @@ function formatDate(dateStr: string): string {
 
         <footer class="footer">
           Summaries generated with Gemini 3 Flash via OpenRouter.
-          Data from the <a href="https://news.ycombinator.com" target="_blank" rel="noopener">Hacker News API</a>.
+          Data from the <a href="https://news.ycombinator.com" rel="noopener">Hacker News API</a>.
         </footer>
       </>
     ) : (
@@ -101,3 +140,51 @@ function formatDate(dateStr: string): string {
     )}
   </div>
 </Base>
+
+<script>
+  const DEFAULT_SIZE = 'medium';
+
+  function setStorySize(article: Element, size: string) {
+    article.querySelectorAll('.story__summary').forEach((el) => {
+      (el as HTMLElement).style.display = (el as HTMLElement).dataset.size === size ? '' : 'none';
+    });
+    const toggle = article.querySelector('.size-toggle--inline');
+    if (toggle) {
+      toggle.querySelectorAll('.size-toggle__btn').forEach((btn) => {
+        btn.classList.toggle('active', (btn as HTMLElement).dataset.size === size);
+      });
+    }
+  }
+
+  function setGlobalSize(size: string) {
+    document.querySelectorAll('.story').forEach((article) => {
+      article.removeAttribute('data-local-size');
+      setStorySize(article, size);
+    });
+    document.querySelectorAll('.size-toggle--global .size-toggle__btn').forEach((btn) => {
+      btn.classList.toggle('active', (btn as HTMLElement).dataset.size === size);
+    });
+  }
+
+  // Initialise: show medium, hide others
+  setGlobalSize(DEFAULT_SIZE);
+
+  // Global toggle
+  document.querySelector('.size-toggle--global')?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('.size-toggle__btn') as HTMLElement | null;
+    if (!btn) return;
+    setGlobalSize(btn.dataset.size!);
+  });
+
+  // Per-story toggle
+  document.querySelectorAll('.size-toggle--inline').forEach((toggle) => {
+    toggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const btn = (e.target as HTMLElement).closest('.size-toggle__btn') as HTMLElement | null;
+      if (!btn) return;
+      const article = btn.closest('.story')!;
+      setStorySize(article, btn.dataset.size!);
+    });
+  });
+</script>

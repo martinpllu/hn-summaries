@@ -196,6 +196,49 @@ a:hover {
 }
 
 /* ================================================================
+   Size toggle
+   ================================================================ */
+
+.size-toggle {
+  display: inline-flex;
+  gap: 0.25rem;
+}
+
+.size-toggle--global {
+  margin-top: 1rem;
+  justify-content: center;
+}
+
+.size-toggle--inline {
+  margin-left: 0.75rem;
+  vertical-align: middle;
+}
+
+.size-toggle__btn {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  padding: 0.15rem 0.4rem;
+  border: 1px solid var(--muted);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  line-height: 1;
+  transition: all 0.15s;
+}
+
+.size-toggle__btn:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.size-toggle__btn.active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+/* ================================================================
    Footer
    ================================================================ */
 

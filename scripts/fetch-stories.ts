@@ -40,7 +40,14 @@ interface HNItem {
   by: string;
   score: number;
   descendants?: number; // comment count
+  time: number; // Unix timestamp
   type: string;
+}
+
+export interface SummarySet {
+  small: string;  // ~20 words
+  medium: string; // ~50 words
+  large: string;  // ~200 words
 }
 
 export interface StorySummary {
@@ -51,7 +58,8 @@ export interface StorySummary {
   author: string;
   score: number;
   commentCount: number;
-  summary: string;
+  submittedAt: string; // ISO timestamp
+  summary: SummarySet;
 }
 
 export interface StoriesData {
@@ -80,6 +88,21 @@ async function fetchItem(id: number): Promise<HNItem> {
 // OpenRouter
 // ---------------------------------------------------------------------------
 
+const SYSTEM_PROMPT = `You are a concise news summariser for a Hacker News digest site.
+
+You must produce three summaries of different lengths for each article. Respond with valid JSON only — no markdown fences, no preamble. Use this exact format:
+
+{"small":"...","medium":"...","large":"..."}
+
+- "small": ~20 words. One sentence capturing the core idea.
+- "medium": ~50 words. 2–3 sentences with the key insight and context.
+- "large": ~200 words. A thorough summary covering what it is, why it matters, and notable details.
+
+Rules for ALL summaries:
+- NEVER include links, URLs, citations, or source references of any kind. No markdown links, no bare URLs, no [source] tags, no (domain.com) references. Output only plain prose.
+- Do not include preamble, commentary, or opinions.
+- Use British English spelling.`;
+
 async function callOpenRouter(apiKey: string, prompt: string): Promise<string> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
@@ -95,7 +118,10 @@ async function callOpenRouter(apiKey: string, prompt: string): Promise<string> {
       },
       body: JSON.stringify({
         model: `${GEMINI_MODEL}:online`,
-        messages: [{ role: 'user', content: prompt }],
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user', content: prompt },
+        ],
       }),
       signal: controller.signal,
     });
@@ -120,15 +146,18 @@ async function callOpenRouter(apiKey: string, prompt: string): Promise<string> {
 // Summarize
 // ---------------------------------------------------------------------------
 
-async function summarizeArticle(item: HNItem, apiKey: string): Promise<string> {
+async function summarizeArticle(item: HNItem, apiKey: string): Promise<SummarySet> {
   const url = item.url || `https://news.ycombinator.com/item?id=${item.id}`;
 
-  const prompt = `Fetch and read this article, then write a concise 2-3 sentence summary. Focus on the key insight or news. No preamble, just the summary.
+  const prompt = `Fetch and read this article, then summarise it at three lengths. Respond with JSON only.
 
 Title: ${item.title}
 URL: ${url}`;
 
-  return callOpenRouter(apiKey, prompt);
+  const raw = await callOpenRouter(apiKey, prompt);
+  // Strip markdown code fences if present
+  const cleaned = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+  return JSON.parse(cleaned) as SummarySet;
 }
 
 // ---------------------------------------------------------------------------
@@ -203,11 +232,13 @@ async function main() {
           author: item.by,
           score: item.score,
           commentCount: item.descendants ?? 0,
+          submittedAt: new Date(item.time * 1000).toISOString(),
           summary,
         });
         console.log(`  ✓ Done\n`);
       } catch (err: any) {
         console.error(`  ✗ Error: ${err.message}\n`);
+        const fallback = 'Summary unavailable.';
         newSummaries.set(item.id, {
           id: item.id,
           title: item.title,
@@ -216,7 +247,8 @@ async function main() {
           author: item.by,
           score: item.score,
           commentCount: item.descendants ?? 0,
-          summary: 'Summary unavailable.',
+          submittedAt: new Date(item.time * 1000).toISOString(),
+          summary: { small: fallback, medium: fallback, large: fallback },
         });
       }
     }
