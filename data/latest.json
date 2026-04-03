@@ -1,6 +1,6 @@
 {
   "date": "2026-04-03",
-  "generatedAt": "2026-04-03T19:03:57.147Z",
+  "generatedAt": "2026-04-03T19:54:37.006Z",
   "stories": [
     {
       "id": 47629433,
@@ -8,9 +8,14 @@
       "url": "https://www.inaturalist.org/",
       "hnUrl": "https://news.ycombinator.com/item?id=47629433",
       "author": "bookofjoe",
-      "score": 129,
-      "commentCount": 43,
-      "summary": "iNaturalist is a global social network and nonprofit platform that enables citizens to record, share, and crowdsource identifications of biodiversity observations from the natural world. The key insight is that these individual findings are shared with scientific repositories like the Global Biodiversity Information Facility, transforming personal encounters with nature into valuable data for researchers and conservationists."
+      "score": 182,
+      "commentCount": 53,
+      "submittedAt": "2026-04-03T17:22:20.000Z",
+      "summary": {
+        "small": "iNaturalist is a social network for naturalists to share biodiversity observations, map global wildlife, and contribute to scientific research.",
+        "medium": "iNaturalist is a global citizen science platform and social network where users record and share observations of the natural world. By crowdsourcing species identifications through expert help and computer vision, it generates high-quality biodiversity data for scientific repositories to help monitor and protect wildlife.",
+        "large": "iNaturalist is a joint initiative and non-profit social network focused on biodiversity conservation through community participation. It allows users to record encounters with wild organisms—ranging from common backyard weeds to rare animals—using mobile apps or web tools. The platform serves as a crowdsourced identification system where observations are verified by a global community of experts and a sophisticated computer vision model. Beyond being a personal tool for maintaining life lists, iNaturalist functions as a critical engine for citizen science. Verified findings are shared with scientific data repositories like the Global Biodiversity Information Facility, providing researchers and resource managers with vital data on species occurrences and phenology. The organisation targets a mission of building a community of 100 million naturalists by 2030 to better understand and sustain global biodiversity. While it supports data collection, developers clarify that it is not a general-purpose photo backup service or a repository for external data not generated within the platform. Users can also participate in Bioblitz events, join specific conservation projects, and engage in a communal forum to discuss findings and improve their naturalist skills."
+      }
     },
     {
       "id": 47625952,
@@ -18,9 +23,29 @@
       "url": "https://text.blogosphere.app/",
       "hnUrl": "https://news.ycombinator.com/item?id=47625952",
       "author": "ramkarthikk",
-      "score": 483,
-      "commentCount": 137,
-      "summary": "Blogosphere is an aggregator for independent personal blogs designed to preserve the human-centric \"indie web\" in an era of social media and AI-generated content. [news.ycombinator.com](https://news.ycombinator.com/item?id=47625952) It offers a minimal, Hacker News-style interface that avoids algorithmic feeds in favor of recent posts curated by category and manual user submissions. [blogosphere.app](https://blogosphere.app/)"
+      "score": 519,
+      "commentCount": 146,
+      "submittedAt": "2026-04-03T12:33:45.000Z",
+      "summary": {
+        "small": "Blogosphere is a curated platform designed to preserve the indie web by aggregating and highlighting recent posts from personal blogs.",
+        "medium": "Blogosphere is a discovery tool for the indie web, fetching recent content from personal blogs across various categories. It offers two versions: a minimal, Hacker News-inspired static site and a feature-rich version where users can follow specific authors and curate their own reading feeds.",
+        "large": "Blogosphere is a newly launched directory and frontpage designed to revitalise the indie web by providing a central hub for personal blog discovery. Created in response to the perceived decline of quality search results and the rise of AI-generated content, the platform manually reviews and indexes human-written blogs across diverse categories such as technology, photography, and design. The service is available in two distinct formats: a 'Minimal' version, which serves as a fast, static, and text-heavy interface inspired by Hacker News, and a 'Non-minimal' version that includes more modern amenities. On the standard site, users can create accounts to follow specific blogs and build a personalised 'For You' feed based on recent updates from their chosen authors. Unlike traditional algorithmic social media, the project aims to stay true to RSS principles by prioritising recent chronological posts from genuine individuals. The developer encourages community participation by allowing bloggers to submit their own sites for review, aiming to bypass the 'SEO hell' of modern search engines and return to a more authentic, hand-curated web experience reminiscent of early webrings and directories."
+      }
+    },
+    {
+      "id": 47630893,
+      "title": "Age Verification on Systemd and Flatpak",
+      "url": "https://cybrkyd.com/post/age-verification-on-systemd-and-flatpak/",
+      "hnUrl": "https://news.ycombinator.com/item?id=47630893",
+      "author": "londonanon",
+      "score": 25,
+      "commentCount": 9,
+      "submittedAt": "2026-04-03T19:17:28.000Z",
+      "summary": {
+        "small": "Systemd has introduced a birth date field to user records to support emerging global age-verification and parental control laws.",
+        "medium": "Systemd now includes an optional birthDate field in its userdb component, responding to new regulations in the US and Brazil. This metadata allows desktop portals and Flatpak apps to implement age-sensitive content controls without giving applications direct access to private user data.",
+        "large": "Recent updates to systemd and xdg-desktop-portal have introduced foundational support for age-verification on Linux desktops. Systemd now includes a birthDate field within its JSON-based user records, intended to serve as a system-level source of truth. This change is driven by a series of new international regulations, including laws in California, Colorado, and Brazil, which mandate stricter parental controls and age-gated access for minors. Importantly, systemd itself does not enforce these restrictions; it merely provides the metadata for higher-level components. The proposed workflow involves xdg-desktop-portal acting as a mediator, where sandboxed applications like Flatpaks can request a user's age bracket—such as child, teen, or adult—rather than accessing the full birth date directly. This technical shift has sparked debate within the open-source community regarding privacy and the potential for 'nanny state' oversight. While some developers argue that storing full dates of birth is a security risk, others maintain that provide a standardised backend is necessary for legal compliance. Several projects, including GrapheneOS and Garuda Linux, have voiced resistance, stating they will not implement such measures unless legally compelled to do so."
+      }
     },
     {
       "id": 47618223,
@@ -28,9 +53,29 @@
       "url": "https://www.mintlify.com/blog/how-we-built-a-virtual-filesystem-for-our-assistant",
       "hnUrl": "https://news.ycombinator.com/item?id=47618223",
       "author": "denssumesh",
-      "score": 67,
-      "commentCount": 41,
-      "summary": "Mintlify replaced its traditional RAG pipeline with a virtual filesystem that allows AI agents to interact with documentation through standard file operations like `ls` and `cat`. This architectural shift enables \"agentic retrieval,\" where the model uses semantic search as a tool to explore and retrieve granular context rather than relying on a pre-constructed context window. This approach significantly improved accuracy and reduced hallucinations by giving the assistant more control over how it discovers information within the source of truth."
+      "score": 113,
+      "commentCount": 57,
+      "submittedAt": "2026-04-02T18:24:29.000Z",
+      "summary": {
+        "small": "Mintlify replaced traditional RAG with a virtual filesystem and agentic retrieval to improve AI documentation accuracy and context handling.",
+        "medium": "Mintlify has moved away from standard Retrieval-Augmented Generation (RAG) in favour of a virtual filesystem and agentic retrieval. By allowing the LLM to use tool calling to browse documentation like a filesystem, the assistant better understands user intent and retrieves more precise context than keyword-matching allows.",
+        "large": "Mintlify has transitioned its AI documentation assistant from traditional Retrieval-Augmented Generation (RAG) to an architecture powered by agentic retrieval and a virtual filesystem. In standard RAG systems, keyword-matching is used to force-feed specific context to the model, which often leads to incomplete or irrelevant answers if the initial search fails. The new approach treats documentation as a filesystem that the AI can browse dynamically. Using agentic retrieval, the assistant (which leverages Claude 4) is given access to search tools and can decide for itself which parts of the documentation to explore based on the user's intent. This allows the system to clarify vague questions, refine multi-step queries, and provide significantly more accurate responses with citations. This shift matters because documentation is increasingly becoming a primary interface for both humans and AI agents. By providing a 'source of truth' that the AI can navigate intelligently, Mintlify ensures that the answers generated are rooted in up-to-date, structured content. The team also overhauled their feedback pipeline, using ClickHouse to analyse negative interactions and further refine how the assistant handles complex search tasks across various subdomains."
+      }
+    },
+    {
+      "id": 47630576,
+      "title": "How to Make a Sliding, Self-Locking, and Predator-Proof Chicken Coop Door (2020)",
+      "url": "https://www.backyardchickens.com/articles/how-to-make-a-sliding-self-locking-and-predator-proof-chicken-coop-door.75906/",
+      "hnUrl": "https://news.ycombinator.com/item?id=47630576",
+      "author": "uticus",
+      "score": 18,
+      "commentCount": 3,
+      "submittedAt": "2026-04-03T18:54:11.000Z",
+      "summary": {
+        "small": "Build a vertical sliding chicken coop door that uses a clever pulley system to self-lock against predators without manual latches.",
+        "medium": "This DIY guide details how to construct a predator-proof chicken coop door using shelf tracks and a vertical sliding mechanism. The design features an internal self-locking system that engages when lowered, preventing animals from lifting the door from the outside, and can be operated via a simple external string.",
+        "large": "Constructing a secure chicken coop is essential for protecting poultry from nocturnal predators, and this guide provides a blueprint for a vertical sliding, self-locking door. The design focuses on eliminating the need for manual padlocks or latches while ensuring the door cannot be pried open from the bottom by animals. It utilises affordable materials, including laminate shelving for the door panel, closet shelf tracks for the vertical runners, and a robe hook that acts as a gravity-fed locking mechanism. When the door is lowered via an external string, the hook engages internally to secure the panel in place. Key components for the build include a jigsaw, drill, and table saw, alongside hardware like stainless steel screw eyes and hinges. For those seeking higher levels of automation, the fundamental sliding design can be upgraded with motorised winches, 12-volt batteries, and light sensors or timers to facilitate automatic opening at dawn and closing at dusk. This approach balances frugality with high security, offering a robust alternative to standard wooden doors that may rot or plastic versions that lack sufficient strength against determined predators."
+      }
     },
     {
       "id": 47629116,
@@ -38,9 +83,14 @@
       "url": "https://tinygo.org/",
       "hnUrl": "https://news.ycombinator.com/item?id=47629116",
       "author": "uticus",
-      "score": 33,
-      "commentCount": 5,
-      "summary": "TinyGo is an LLVM-based compiler designed to bring the Go programming language to resource-constrained environments like microcontrollers and WebAssembly. It enables developers to run Go code on over 100 different hardware boards and produce highly compact WASM binaries for web browsers and edge computing."
+      "score": 54,
+      "commentCount": 8,
+      "submittedAt": "2026-04-03T16:57:09.000Z",
+      "summary": {
+        "small": "TinyGo is an LLVM-based compiler bringing the Go programming language to microcontrollers and high-performance WebAssembly applications.",
+        "medium": "TinyGo is a specialised compiler designed to run Go on resource-constrained devices and the web. By leveraging LLVM, it produces significantly smaller binaries than the standard Go compiler, making it compatible with over 100 microcontroller boards and efficient WebAssembly environments.",
+        "large": "TinyGo is an LLVM-based compiler project created to bring the Go programming language to embedded systems and WebAssembly. While the standard Go compiler produce binaries that are often too large for constrained hardware, TinyGo generates compact code suitable for microcontrollers and edge computing. It currently supports over 100 different boards, ranging from educational tools like the BBC micro:bit and Arduino Uno to industrial processors from Nordic Semiconductor and ST Microelectronics.\n\nBeyond hardware, TinyGo is a powerful tool for web development. It compiles Go code into highly efficient WebAssembly modules that can run in browsers or server-side via the WebAssembly System Interface. This allows developers to leverage Go's memory safety and concurrency model while achieving near-native execution speeds. Notable features include a subset of the Go standard library, support for custom JS-to-Go function exports, and deep integration with existing Go tooling. By significantly reducing binary sizes compared to the main Go compiler, TinyGo makes it feasible to deploy Go logic in environments where memory and storage overhead are critical constraints."
+      }
     },
     {
       "id": 47567222,
@@ -48,49 +98,14 @@
       "url": "https://chalmovsky.com/2026/03/29/samsung-magician.html",
       "hnUrl": "https://news.ycombinator.com/item?id=47567222",
       "author": "chalmovsky",
-      "score": 281,
-      "commentCount": 148,
-      "summary": "The article highlights the extreme difficulty of removing Samsung Magician from macOS, noting that the software lacks a standard uninstaller and its internal cleanup script fails due to system permission errors. To fully purge the utility, users must manually execute a complex series of terminal commands and perform two Recovery Mode reboots to clear protected kernel extensions. The author criticizes Samsung for creating \"malware-like\" software that requires 18 technical steps to uninstall from a modern Mac."
-    },
-    {
-      "id": 47622616,
-      "title": "The Technocracy Movement of the 1930s",
-      "url": "https://donotresearch.substack.com/p/welcome-to-the-technocracy",
-      "hnUrl": "https://news.ycombinator.com/item?id=47622616",
-      "author": "lazydogbrownfox",
-      "score": 40,
-      "commentCount": 19,
-      "summary": "The Technocracy movement of the 1930s, led by Howard Scott, sought to replace democratic governance with an anti-democratic state ruled by technical experts and engineers to achieve maximum industrial efficiency. Driven by the failures of the Great Depression, the movement proposed unifying North America into a \"Technate\" managed through energy accounting rather than traditional currency."
-    },
-    {
-      "id": 47562325,
-      "title": "Understanding young news audiences at a time of rapid change",
-      "url": "https://reutersinstitute.politics.ox.ac.uk/understanding-young-news-audiences-time-rapid-change",
-      "hnUrl": "https://news.ycombinator.com/item?id=47562325",
-      "author": "giuliomagnifico",
-      "score": 27,
-      "commentCount": 32,
-      "summary": "Young audiences (18–24) have transitioned from being \"online-first\" to \"social-first,\" increasingly bypassing news websites to access information via short-form video platforms like TikTok and Instagram. This demographic prioritizes individual creators and generative AI tools over traditional news brands, often avoiding mainstream media because they find it too depressing, irrelevant, or difficult to follow."
-    },
-    {
-      "id": 47562135,
-      "title": "Show HN: TurboQuant for vector search – 2-4 bit compression",
-      "url": "https://github.com/RyanCodrai/py-turboquant",
-      "hnUrl": "https://news.ycombinator.com/item?id=47562135",
-      "author": "justsomeguy1996",
-      "score": 49,
-      "commentCount": 3,
-      "summary": "TurboQuant is an implementation of a Google Research (ICLR 2026) algorithm that compresses high-dimensional vectors to 2–4 bits without requiring a training step, enabling zero indexing time. The library utilizes Rust and SIMD acceleration to match FAISS query speeds on ARM hardware while reducing memory usage by approximately 8–16x."
-    },
-    {
-      "id": 47562462,
-      "title": "A School District Tried to Help Train Waymos to Stop for School Buses",
-      "url": "https://www.wired.com/story/a-school-district-tried-to-help-train-waymos-to-stop-for-school-buses-it-didnt-work/",
-      "hnUrl": "https://news.ycombinator.com/item?id=47562462",
-      "author": "phlummox",
-      "score": 13,
-      "commentCount": 12,
-      "summary": "Despite a collaborative effort in Austin to train self-driving cars to stop for school buses, a Waymo vehicle improperly passed a bus with its stop arms extended after a remote human assistant incorrectly signaled the system to proceed. The incident highlights critical gaps in autonomous learning and the risks of human-in-the-loop error, especially as six human drivers also failed to stop during the same event."
+      "score": 323,
+      "commentCount": 164,
+      "submittedAt": "2026-03-29T20:55:46.000Z",
+      "summary": {
+        "small": "Uninstalling Samsung Magician from macOS requires a convoluted 18-step process involving terminal commands and multiple system recovery reboots.",
+        "medium": "Samsung Magician for macOS lacks a standard uninstaller and standard removal methods often fail due to system permission errors. Completely purging the software requires a manual 18-step procedure, including deleting deep-seated system files and performing two separate reboots into Recovery Mode to manage kernel extensions.",
+        "large": "Samsung Magician, a disk utility required for hardware encryption on Samsung SSDs, has been criticised for its lack of a standard macOS uninstaller and its invasive installation methods. Users attempting to remove the software found that the included cleanup script fails due to permission errors on macOS, leaving hundreds of files behind. Because the utility installs persistent kernel extensions and various background processes across multiple system directories, a simple drag-to-trash removal is ineffective. According to [chalmovsky.com](https://chalmovsky.com/2026/03/29/samsung-magician.html), a successful uninstallation requires a manual 18-step process. This involves using terminal commands to delete files from Application Support, LaunchAgents, and LaunchDaemons. Most significantly, the process requires two separate reboots into Recovery Mode: one to bypass System Integrity Protection to remove restricted kernel extensions, and another to reset system security settings. Other sources, such as [macperformanceguide.com](https://macperformanceguide.com/blog/2024/20240726_0900-SamsungMagician.html) and [discussions.apple.com](https://discussions.apple.com/thread/255162665), confirm that finding the hidden cleanup script inside the app bundle is difficult for average users, and the lack of official documentation from Samsung regarding uninstallation has led to widespread frustration in the Mac community."
+      }
     },
     {
       "id": 47630592,
@@ -98,19 +113,44 @@
       "url": "https://www.dbos.dev/blog/async-python-is-secretly-deterministic",
       "hnUrl": "https://news.ycombinator.com/item?id=47630592",
       "author": "KraftyOne",
-      "score": 3,
-      "commentCount": 0,
-      "summary": "While async Python allows for concurrent execution, it remains \"secretly deterministic\" because its underlying single-threaded event loop processes tasks in a predictable, consistent order based on their scheduling sequence. By leveraging this behavior, developers can create durable workflows that maintain a stable execution order, enabling reliable replay-based recovery even when running multiple steps concurrently via `asyncio.gather`."
+      "score": 18,
+      "commentCount": 9,
+      "submittedAt": "2026-04-03T18:55:12.000Z",
+      "summary": {
+        "small": "Async Python's single-threaded event loop provides hidden determinism, enabling reliable replay-based recovery for durable asynchronous workflows and concurrent tasks.",
+        "medium": "Durable execution requires determinism for recovery, posing a challenge for concurrent async Python. However, because the asyncio event loop is single-threaded and processes tasks in a specific queue order, it is actually deterministic. Developers can leverage this internal scheduling logic to ensure consistent execution replay without sacrificing performance.",
+        "large": "Developing durable execution libraries in Python requires workflows to be deterministic so they can be accurately replayed during recovery. This is inherently difficult with asynchronous programming, where concurrent tasks managed by asyncio.gather often appear to overlap or complete in unpredictable sequences. However, a deeper look at the asyncio event loop reveals that it is secretly deterministic. Because Python's async model is single-threaded and cooperative, only one task can execute at any given time. When multiple coroutines are scheduled concurrently, the event loop places them into a specific internal queue and executes them according to fixed scheduling rules. By understanding how the event loop yields control and processes this queue, developers can predict the exact interleaving of execution steps. This hidden determinism allows systems like DBOS to maintain a consistent execution order across replays, enabling failed workflows to recover completed steps from checkpoints and re-execute incomplete ones reliably. Ultimately, this insight proves that high-performance concurrent I/O and strict execution determinism are not mutually exclusive in the Python ecosystem."
+      }
     },
     {
-      "id": 47629905,
-      "title": "Show HN: An evidence-rated encyclopedia of peptides",
-      "url": "https://www.whatthepeptide.org/",
-      "hnUrl": "https://news.ycombinator.com/item?id=47629905",
-      "author": "uelbably",
-      "score": 12,
-      "commentCount": 1,
-      "summary": "This comprehensive database provides evidence-rated profiles for over 60 research peptides, categorizing them by scientific maturity from FDA-approved drugs to preclinical-only compounds. By tracing every claim to primary literature and evaluating suppliers against rigorous purity standards, the platform serves as a transparent alternative to anecdotal forum consensus and aggressive marketing copy."
+      "id": 47562135,
+      "title": "Show HN: TurboQuant for vector search – 2-4 bit compression",
+      "url": "https://github.com/RyanCodrai/py-turboquant",
+      "hnUrl": "https://news.ycombinator.com/item?id=47562135",
+      "author": "justsomeguy1996",
+      "score": 63,
+      "commentCount": 5,
+      "submittedAt": "2026-03-29T11:10:44.000Z",
+      "summary": {
+        "small": "TurboQuant is an unofficial Rust-based implementation of Google's compression algorithm, providing 2-4 bit vector quantization for fast similarity search.",
+        "medium": "This Rust implementation, with Python bindings via PyO3, adapts Google Research's TurboQuant for high-dimensional vector search. It compresses vectors to 2-4 bits with near-optimal distortion while requiring zero training. It matches or exceeds FAISS performance on ARM architectures and achieves higher recall at 4-bit compression.",
+        "large": "An unofficial implementation of Google Research's TurboQuant (ICLR 2026), this project provides a high-performance vector search index written in Rust with Python bindings. TurboQuant is designed to compress high-dimensional vectors into just 2-4 bits per coordinate using a data-oblivious approach that requires no training or calibration. This makes it significantly faster to build than traditional methods like FAISS Product Quantization (PQ), which typically requires a time-consuming training step. The library utilizes PolarQuant and Quantized Johnson-Lindenstrauss (QJL) to manage memory overhead and maintain high accuracy. Benchmarks on Apple Silicon (M3 Max) show that TurboQuant equals or beats FAISS in search speed while providing superior recall at 4-bit widths. On x86 platforms, it remains competitive, trailing FAISS speed by roughly 18-25% due to current AVX2 code generation differences. The project is particularly valuable for memory-constrained environments where reducing the footprint of the key-value cache or large vector databases is critical without sacrificing retrieval quality or increasing indexing latency."
+      }
+    },
+    {
+      "id": 47628326,
+      "title": "F-15E jet shot down over Iran",
+      "url": "https://www.theguardian.com/world/2026/apr/03/us-fighter-jet-confirmed-shot-down-over-iran",
+      "hnUrl": "https://news.ycombinator.com/item?id=47628326",
+      "author": "tjwds",
+      "score": 140,
+      "commentCount": 327,
+      "submittedAt": "2026-04-03T16:00:44.000Z",
+      "summary": {
+        "small": "Iran claims to have shot down a US fighter jet, with wreckage photos suggesting the aircraft is an F-15E.",
+        "medium": "Iranian state media reports that their air defence forces shot down a US fighter jet over central Iran. While early local reports claimed the aircraft was an F-35 stealth jet, independent analysts identify wreckage as an F-15E Strike Eagle from the 494th Fighter Squadron. The Pentagon has not yet provided official confirmation.",
+        "large": "Iranian state media outlets, including Press TV and the Mehr news agency, have reported the downing of a United States fighter jet over central Iran using a new air defence system. Early Iranian claims identified the aircraft as an F-35 Lightning II stealth fighter; however, open-source intelligence analysts and military experts have scrutinised wreckage photos to identify the jet as a Boeing F-15E Strike Eagle. Evidence includes a vertical stabiliser bearing the ‘LN’ tail code and insignia associated with the 48th Fighter Wing based at RAF Lakenheath in the United Kingdom. Iranian authorities have reportedly offered a bounty for the capture of the pilot or pilots, whose current status remains uncertain. While some Iranian sources suggest the pilot did not survive the impact, others claim a US search and rescue operation involving C-130 Hercules aircraft and Black Hawk helicopters has been attempted. The US Department of Defense has not officially confirmed the loss, though the incident follows weeks of heightened regional tension and previous reports of aircraft taking damage from enemy fire. The authenticity of some media remains under debate due to the prevalence of AI-generated imagery in recent psychological operations."
+      }
     }
   ]
 }
