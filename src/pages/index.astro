@@ -24,6 +24,15 @@ interface StorySummary {
 interface StoriesData {
   date: string;
   generatedAt: string;
+  runCost?: {
+    selectionUsd: number;
+    summariesUsd: number;
+    totalUsd: number;
+    requestCount: number;
+    promptTokens: number;
+    completionTokens: number;
+    totalTokens: number;
+  };
   stories: StorySummary[];
 }
 
@@ -97,6 +106,10 @@ function formatDate(dateStr: string): string {
     day: 'numeric',
   });
 }
+
+function formatUsd(amount: number): string {
+  return `$${amount.toFixed(4)}`;
+}
 ---
 
 <Base title="HN Summaries">
@@ -154,6 +167,7 @@ function formatDate(dateStr: string): string {
 
         <footer class="footer">
           Summaries generated with Gemini 3 Flash via OpenRouter.
+          {data.runCost && <> Last run cost {formatUsd(data.runCost.totalUsd)}.</>}
           Data from the <a href="https://news.ycombinator.com" rel="noopener">Hacker News API</a>.
         </footer>
       </>

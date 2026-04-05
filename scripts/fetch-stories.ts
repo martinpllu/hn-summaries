@@ -120,6 +120,15 @@ export interface StorySummary {
 export interface StoriesData {
   date: string;
   generatedAt: string;
+  runCost?: {
+    selectionUsd: number;
+    summariesUsd: number;
+    totalUsd: number;
+    requestCount: number;
+    promptTokens: number;
+    completionTokens: number;
+    totalTokens: number;
+  };
   stories: StorySummary[];
 }
 
@@ -535,6 +544,15 @@ async function main() {
   const output: StoriesData = {
     date: today,
     generatedAt: new Date().toISOString(),
+    runCost: {
+      selectionUsd: usageTotals.selection.costUsd,
+      summariesUsd: usageTotals.summary.costUsd,
+      totalUsd: usageTotals.overall.costUsd,
+      requestCount: usageTotals.overall.requests,
+      promptTokens: usageTotals.overall.promptTokens,
+      completionTokens: usageTotals.overall.completionTokens,
+      totalTokens: usageTotals.overall.totalTokens,
+    },
     stories: mergedStories,
   };
 
