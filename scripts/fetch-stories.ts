@@ -49,6 +49,56 @@ interface RankedSelection {
   rankedIds: number[];
 }
 
+interface OpenRouterUsage {
+  prompt_tokens?: number;
+  completion_tokens?: number;
+  total_tokens?: number;
+  cost?: number;
+  prompt_tokens_details?: {
+    cached_tokens?: number;
+    cache_write_tokens?: number;
+  };
+  completion_tokens_details?: {
+    reasoning_tokens?: number;
+  };
+}
+
+interface OpenRouterResponse {
+  id?: string;
+  model?: string;
+  choices?: Array<{
+    message?: {
+      content?: string;
+    };
+  }>;
+  usage?: OpenRouterUsage;
+}
+
+interface OpenRouterResult {
+  id?: string;
+  model?: string;
+  content: string;
+  usage?: OpenRouterUsage;
+}
+
+interface SummaryResult {
+  summary: SummarySet;
+  usage?: OpenRouterUsage;
+}
+
+interface UsageTotals {
+  requests: number;
+  promptTokens: number;
+  completionTokens: number;
+  totalTokens: number;
+  reasoningTokens: number;
+  cachedTokens: number;
+  cacheWriteTokens: number;
+  costUsd: number;
+}
+
+type RequestKind = 'selection' | 'summary';
+
 export interface SummarySet {
   small: string;  // ~20 words
   medium: string; // ~50 words
@@ -72,6 +122,12 @@ export interface StoriesData {
   generatedAt: string;
   stories: StorySummary[];
 }
+
+const usageTotals: Record<RequestKind | 'overall', UsageTotals> = {
+  selection: emptyUsageTotals(),
+  summary: emptyUsageTotals(),
+  overall: emptyUsageTotals(),
+};
 
 // ---------------------------------------------------------------------------
 // HN API
@@ -133,10 +189,59 @@ function cleanJsonResponse(raw: string): string {
   return raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
 }
 
+function emptyUsageTotals(): UsageTotals {
+  return {
+    requests: 0,
+    promptTokens: 0,
+    completionTokens: 0,
+    totalTokens: 0,
+    reasoningTokens: 0,
+    cachedTokens: 0,
+    cacheWriteTokens: 0,
+    costUsd: 0,
+  };
+}
+
+function applyUsageTotals(target: UsageTotals, usage?: OpenRouterUsage) {
+  target.requests += 1;
+  target.promptTokens += usage?.prompt_tokens ?? 0;
+  target.completionTokens += usage?.completion_tokens ?? 0;
+  target.totalTokens += usage?.total_tokens ?? 0;
+  target.reasoningTokens += usage?.completion_tokens_details?.reasoning_tokens ?? 0;
+  target.cachedTokens += usage?.prompt_tokens_details?.cached_tokens ?? 0;
+  target.cacheWriteTokens += usage?.prompt_tokens_details?.cache_write_tokens ?? 0;
+  target.costUsd += usage?.cost ?? 0;
+}
+
+function trackUsage(kind: RequestKind, usage?: OpenRouterUsage) {
+  applyUsageTotals(usageTotals[kind], usage);
+  applyUsageTotals(usageTotals.overall, usage);
+}
+
+function formatUsd(value: number): string {
+  return `$${value.toFixed(6)}`;
+}
+
+function formatUsageLine(usage?: OpenRouterUsage): string {
+  const prompt = usage?.prompt_tokens ?? 0;
+  const completion = usage?.completion_tokens ?? 0;
+  const total = usage?.total_tokens ?? prompt + completion;
+  const cost = usage?.cost ?? 0;
+  const reasoning = usage?.completion_tokens_details?.reasoning_tokens ?? 0;
+  const cached = usage?.prompt_tokens_details?.cached_tokens ?? 0;
+
+  const extras: string[] = [];
+  if (reasoning > 0) extras.push(`${reasoning} reasoning`);
+  if (cached > 0) extras.push(`${cached} cached`);
+
+  return `${formatUsd(cost)} | ${prompt} in / ${completion} out / ${total} total${extras.length ? ` | ${extras.join(', ')}` : ''}`;
+}
+
 async function callOpenRouter(
   apiKey: string,
-  messages: Array<{ role: 'system' | 'user'; content: string }>
-): Promise<string> {
+  messages: Array<{ role: 'system' | 'user'; content: string }>,
+  kind: RequestKind
+): Promise<OpenRouterResult> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
@@ -163,8 +268,15 @@ async function callOpenRouter(
       throw new Error(`OpenRouter API error (${response.status}): ${errorText}`);
     }
 
-    const data = await response.json();
-    return data.choices[0]?.message?.content || '';
+    const data = (await response.json()) as OpenRouterResponse;
+    trackUsage(kind, data.usage);
+
+    return {
+      id: data.id,
+      model: data.model,
+      content: data.choices?.[0]?.message?.content || '',
+      usage: data.usage,
+    };
   } catch (error: any) {
     clearTimeout(timeoutId);
     if (error.name === 'AbortError') throw new Error(`Request timeout (${TIMEOUT_MS}ms)`);
@@ -176,7 +288,7 @@ async function callOpenRouter(
 // Summarize
 // ---------------------------------------------------------------------------
 
-async function summarizeArticle(item: HNItem, apiKey: string): Promise<SummarySet> {
+async function summarizeArticle(item: HNItem, apiKey: string): Promise<SummaryResult> {
   const url = item.url || `https://news.ycombinator.com/item?id=${item.id}`;
 
   const prompt = `Fetch and read this article, then summarise it at three lengths. Respond with JSON only.
@@ -184,12 +296,15 @@ async function summarizeArticle(item: HNItem, apiKey: string): Promise<SummarySe
 Title: ${item.title}
 URL: ${url}`;
 
-  const raw = await callOpenRouter(apiKey, [
+  const result = await callOpenRouter(apiKey, [
     { role: 'system', content: SUMMARIZER_SYSTEM_PROMPT },
     { role: 'user', content: prompt },
-  ]);
-  const cleaned = cleanJsonResponse(raw);
-  return JSON.parse(cleaned) as SummarySet;
+  ], 'summary');
+  const cleaned = cleanJsonResponse(result.content);
+  return {
+    summary: JSON.parse(cleaned) as SummarySet,
+    usage: result.usage,
+  };
 }
 
 function extractDomain(url?: string): string {
@@ -267,11 +382,12 @@ ${JSON.stringify(candidateSummary, null, 2)}`;
   let rankedIds: number[] = [];
 
   try {
-    const raw = await callOpenRouter(apiKey, [
+    const result = await callOpenRouter(apiKey, [
       { role: 'system', content: SELECTION_SYSTEM_PROMPT },
       { role: 'user', content: prompt },
-    ]);
-    const cleaned = cleanJsonResponse(raw);
+    ], 'selection');
+    console.log(`Technical-interest ranking cost: ${formatUsageLine(result.usage)}`);
+    const cleaned = cleanJsonResponse(result.content);
     const parsed = JSON.parse(cleaned) as RankedSelection;
     rankedIds = Array.isArray(parsed.rankedIds) ? parsed.rankedIds : [];
   } catch (error: any) {
@@ -368,7 +484,7 @@ async function main() {
       console.log(`[${i + 1}/${newItems.length}] ${item.title}`);
 
       try {
-        const summary = await summarizeArticle(item, apiKey);
+        const result = await summarizeArticle(item, apiKey);
         newSummaries.set(item.id, {
           id: item.id,
           title: item.title,
@@ -378,9 +494,9 @@ async function main() {
           score: item.score,
           commentCount: item.descendants ?? 0,
           submittedAt: new Date(item.time * 1000).toISOString(),
-          summary,
+          summary: result.summary,
         });
-        console.log(`  ✓ Done\n`);
+        console.log(`  ✓ Done (${formatUsageLine(result.usage)})\n`);
       } catch (err: any) {
         console.error(`  ✗ Error: ${err.message}\n`);
         const fallback = 'Summary unavailable.';
@@ -430,6 +546,15 @@ async function main() {
 
   writeFileSync('data/latest.json', JSON.stringify(output, null, 2));
   console.log('Written to data/latest.json');
+
+  console.log('\nGemini cost summary:');
+  console.log(`  Selection: ${formatUsd(usageTotals.selection.costUsd)} across ${usageTotals.selection.requests} request(s)`);
+  console.log(`  Summaries: ${formatUsd(usageTotals.summary.costUsd)} across ${usageTotals.summary.requests} request(s)`);
+  console.log(`  Total: ${formatUsd(usageTotals.overall.costUsd)} across ${usageTotals.overall.requests} request(s)`);
+  console.log(`  Tokens: ${usageTotals.overall.promptTokens} in / ${usageTotals.overall.completionTokens} out / ${usageTotals.overall.totalTokens} total`);
+  if (usageTotals.overall.reasoningTokens > 0 || usageTotals.overall.cachedTokens > 0) {
+    console.log(`  Extras: ${usageTotals.overall.reasoningTokens} reasoning, ${usageTotals.overall.cachedTokens} cached`);
+  }
 }
 
 main().catch((err) => {

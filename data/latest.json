@@ -1,6 +1,6 @@
 {
   "date": "2026-04-05",
-  "generatedAt": "2026-04-05T07:54:54.624Z",
+  "generatedAt": "2026-04-05T07:57:41.024Z",
   "stories": [
     {
       "id": 47640728,
@@ -8,7 +8,7 @@
       "url": "https://jaso1024.com/mvidia/",
       "hnUrl": "https://news.ycombinator.com/item?id=47640728",
       "author": "Jaso1024",
-      "score": 667,
+      "score": 669,
       "commentCount": 149,
       "submittedAt": "2026-04-04T16:45:54.000Z",
       "summary": {
@@ -23,8 +23,8 @@
       "url": "https://www.phoronix.com/news/Linux-7.0-AWS-PostgreSQL-Drop",
       "hnUrl": "https://news.ycombinator.com/item?id=47644864",
       "author": "crcastle",
-      "score": 251,
-      "commentCount": 61,
+      "score": 252,
+      "commentCount": 62,
       "submittedAt": "2026-04-05T00:13:55.000Z",
       "summary": {
         "small": "AWS engineers report that Linux 7.0 significantly reduces PostgreSQL performance, but kernel developers say the database requires architectural updates.",
@@ -38,28 +38,13 @@
       "url": "https://arxiv.org/abs/2604.01193",
       "hnUrl": "https://news.ycombinator.com/item?id=47637757",
       "author": "Anon84",
-      "score": 586,
+      "score": 587,
       "commentCount": 175,
       "submittedAt": "2026-04-04T10:26:21.000Z",
       "summary": {
         "small": "Simple Self-Distillation enhances model code generation by fine-tuning on its own unverified raw outputs without teachers or reward models.",
         "medium": "Simple Self-Distillation (SSD) demonstrates that LLMs can improve coding performance by fine-tuning on their own raw, unverified generations. By sampling with specific temperature configurations and using standard supervised fine-tuning, models like Qwen3-30B-Instruct saw significant gains on LiveCodeBench without needing external teachers, verifiers, or reinforcement learning.",
         "large": "Researchers have introduced Simple Self-Distillation (SSD), a methodology that improves Large Language Model (LLM) code generation using only the model's own raw outputs. This approach challenges the assumption that performance gains require stronger teacher models, execution-based verification, or complex reinforcement learning pipelines.\n\n**The Methodology**\n- The process involves generating a single solution for an unlabeled set of programming problems using specific decoding temperatures.\n- The model is then fine-tuned on these unfiltered, unverified outputs using standard supervised fine-tuning (SFT).\n- This method relies entirely on the model's internal capabilities rather than external feedback loops or ground-truth labels.\n\n**Key Findings**\n- SSD improved Qwen3-30B-Instruct's pass@1 score on LiveCodeBench v6 from 42.4% to 55.3%.\n- Performance gains were most pronounced on difficult problems and consistent across various scales (4B to 30B parameters).\n- The technique works effectively for both standard instruct models and 'thinking' variants from the Qwen and Llama families.\n\n**Technical Insight**\n- The efficacy of SSD is attributed to reshaping token distributions to resolve the 'precision-exploration conflict.'\n- The process suppresses incorrect 'distractor' tokens in contexts requiring precision while maintaining diversity in sections where exploration is beneficial.\n- It offers a highly cost-effective and complementary post-training strategy for code generation."
-      }
-    },
-    {
-      "id": 47640380,
-      "title": "Apple approves driver that lets Nvidia eGPUs work with Arm Macs",
-      "url": "https://www.theverge.com/tech/907003/apple-approves-driver-that-lets-nvidia-egpus-work-with-arm-macs",
-      "hnUrl": "https://news.ycombinator.com/item?id=47640380",
-      "author": "naves",
-      "score": 417,
-      "commentCount": 184,
-      "submittedAt": "2026-04-04T16:16:10.000Z",
-      "summary": {
-        "small": "Apple has signed a third-party driver from Tiny Corp allowing Nvidia eGPUs to work with Apple Silicon for AI workloads.",
-        "medium": "Apple has approved a driver by Tiny Corp that enables Nvidia and AMD external GPUs to function on Arm-based Macs. While specifically designed for Large Language Models rather than graphics, the signing allows installation without disabling System Integrity Protection, though users must still compile it via Docker.",
-        "large": "Apple has officially signed a third-party driver developed by AI startup Tiny Corp, enabling external GPUs (eGPUs) to interface with Apple Silicon Macs via USB4 or Thunderbolt. This marks a significant policy shift, as Arm-based Macs previously lacked official support for external graphics processors, particularly those from Nvidia.\n\n**Key Technical Details**\n- The driver supports Nvidia Ampere (or newer) and AMD RDNA3 architectures.\n- It is specifically optimised for AI and Large Language Model (LLM) compute tasks rather than traditional display output or gaming.\n- Users must compile the driver using Docker, making it a tool for advanced users rather than a plug-and-play consumer solution.\n\n**Security and Compatibility**\n- Because Apple has signed the driver, users no longer need to disable System Integrity Protection (SIP) to use the hardware.\n- The solution requires macOS 12.1 or later and a compatible USB4/Thunderbolt connection.\n- While the setup is technical, it provides a crucial pathway for developers needing specialised Nvidia hardware for machine learning workloads that Apple's integrated graphics may not match."
       }
     },
     {
@@ -93,6 +78,51 @@
       }
     },
     {
+      "id": 47640380,
+      "title": "Apple approves driver that lets Nvidia eGPUs work with Arm Macs",
+      "url": "https://www.theverge.com/tech/907003/apple-approves-driver-that-lets-nvidia-egpus-work-with-arm-macs",
+      "hnUrl": "https://news.ycombinator.com/item?id=47640380",
+      "author": "naves",
+      "score": 419,
+      "commentCount": 184,
+      "submittedAt": "2026-04-04T16:16:10.000Z",
+      "summary": {
+        "small": "Apple has signed a third-party driver from Tiny Corp allowing Nvidia eGPUs to work with Apple Silicon for AI workloads.",
+        "medium": "Apple has approved a driver by Tiny Corp that enables Nvidia and AMD external GPUs to function on Arm-based Macs. While specifically designed for Large Language Models rather than graphics, the signing allows installation without disabling System Integrity Protection, though users must still compile it via Docker.",
+        "large": "Apple has officially signed a third-party driver developed by AI startup Tiny Corp, enabling external GPUs (eGPUs) to interface with Apple Silicon Macs via USB4 or Thunderbolt. This marks a significant policy shift, as Arm-based Macs previously lacked official support for external graphics processors, particularly those from Nvidia.\n\n**Key Technical Details**\n- The driver supports Nvidia Ampere (or newer) and AMD RDNA3 architectures.\n- It is specifically optimised for AI and Large Language Model (LLM) compute tasks rather than traditional display output or gaming.\n- Users must compile the driver using Docker, making it a tool for advanced users rather than a plug-and-play consumer solution.\n\n**Security and Compatibility**\n- Because Apple has signed the driver, users no longer need to disable System Integrity Protection (SIP) to use the hardware.\n- The solution requires macOS 12.1 or later and a compatible USB4/Thunderbolt connection.\n- While the setup is technical, it provides a crucial pathway for developers needing specialised Nvidia hardware for machine learning workloads that Apple's integrated graphics may not match."
+      }
+    },
+    {
+      "id": 47591367,
+      "title": "Breaking Enigma with Index of Coincidence on a Commodore 64",
+      "url": "https://imapenguin.com/2026/03/breaking-enigma-with-index-of-coincidence-on-a-commodore-64/",
+      "hnUrl": "https://news.ycombinator.com/item?id=47591367",
+      "author": "saganus",
+      "score": 40,
+      "commentCount": 4,
+      "submittedAt": "2026-03-31T18:16:17.000Z",
+      "summary": {
+        "small": "This article explains how to crack Enigma encryption on a Commodore 64 using the Index of Coincidence statistical method.",
+        "medium": "Using a Commodore 64, this tutorial demonstrates how the Index of Coincidence can break Enigma ciphertext without needing a crib. By measuring letter frequency patterns against German language statistics, the attack bypasses the plugboard's complexity and identifies the correct rotor settings through 16-bit integer comparisons in assembly.",
+        "large": "This article details a method for cracking the Enigma M3 cipher on a Commodore 64 by using the Index of Coincidence (IC) to identify rotor settings without requiring known plaintext or cribs. By focusing on the statistical properties of language rather than brute-forcing every possible combination, the attack significantly reduces the computational burden on the 8-bit hardware.\n\n**Statistical Analysis**\n- The Index of Coincidence measures the probability that two randomly selected letters from a text match, which is higher in natural language than in random noise.\n- German text typically has an IC near 0.067, while random or incorrectly decrypted text produces a value near 0.038.\n- This allows the cracker to identify the correct rotor settings by finding the configuration that produces the highest statistical correlation to natural language.\n\n**Technical Implementation**\n- The Commodore 64 implementation uses 16-bit integer math to avoid slow floating-point calculations during the IC sum comparison.\n- The attack ignores the plugboard during the initial search because the plugboard is a monoalphabetic substitution that does not alter the underlying letter frequency distribution.\n- Once the rotor settings are recovered via IC, the plugboard settings can be easily deduced by comparing the resulting text to known language patterns."
+      }
+    },
+    {
+      "id": 47606244,
+      "title": "Training mRNA Language Models Across 25 Species for $165",
+      "url": "https://news.ycombinator.com/item?id=47606244",
+      "hnUrl": "https://news.ycombinator.com/item?id=47606244",
+      "author": "maziyar",
+      "score": 138,
+      "commentCount": 32,
+      "submittedAt": "2026-04-01T20:38:24.000Z",
+      "summary": {
+        "small": "OpenMed developed a low-cost protein AI pipeline and trained mRNA codon-level language models across 25 species for just $165.",
+        "medium": "OpenMed has released an end-to-end protein AI pipeline covering structure prediction, sequence design, and codon optimization. By training four production models over 55 GPU-hours, they achieved a high-performing species-conditioned system that significantly outperforms ModernBERT in codon-level modeling for a minimal cost of 165 dollars.",
+        "large": "OpenMed has developed an end-to-end protein AI pipeline designed to take therapeutic concepts from initial design to synthesis-ready DNA sequences. The project focuses on three primary stages: structure prediction, amino acid sequence design, and species-specific codon optimization to ensure efficient protein expression. By utilizing cost-effective training methods, the team successfully scaled their models across 25 species for a total compute cost of only 165 dollars.\n\n**Technical Achievements**\n- Evaluated multiple transformer architectures for codon-level language modeling tasks.\n- Identified CodonRoBERTa-large-v2 as the top performer with a perplexity of 4.10.\n- Achieved a Spearman CAI correlation of 0.40, surpassing the performance of ModernBERT.\n\n**Scalability and Scope**\n- Trained four production-grade models in approximately 55 GPU-hours.\n- Developed a unique species-conditioned system that is currently unavailable in other open-source projects.\n- Released the complete pipeline, architectural documentation, and runnable code for community use.\n\n**Community Feedback**\n- Experts in structural biology noted the potential utility for pharmaceutical design and drug development.\n- Commentary highlighted ongoing challenges regarding the quality of verifiable protein training data.\n- Critics suggested that while the models are accurate, further research is needed to confirm the biological utility of the predicted outputs."
+      }
+    },
+    {
       "id": 47614532,
       "title": "Ruckus: Racket for iOS",
       "url": "https://ruckus.defn.io/",
@@ -108,48 +138,18 @@
       }
     },
     {
-      "id": 47639303,
-      "title": "Show HN: I made open source, zero power PCB hackathon badges",
-      "url": "https://github.com/KaiPereira/Overglade-Badges",
-      "hnUrl": "https://news.ycombinator.com/item?id=47639303",
-      "author": "kaipereira",
-      "score": 87,
-      "commentCount": 9,
-      "submittedAt": "2026-04-04T14:20:21.000Z",
-      "summary": {
-        "small": "Overglade-Badges is an open-source, zero-power hackathon badge featuring an RP2040 microcontroller, passive NFC, and an e-ink display.",
-        "medium": "Designed for the Overglade hackathon in Singapore, these open-source PCB badges utilize the RP2040 SoC and an e-ink driver for zero-power operation. The boards include passive NFC, 20 breakout GPIO pins for programming, and support MicroPython firmware for custom identity and image display.",
-        "large": "Designed for the Overglade game jam in Singapore, these open-source badges demonstrate the capabilities of zero-power hardware using the RP2040 microcontroller. The board combines an e-ink display for persistent image viewing with passive NFC functionality, allowing the device to perform its core tasks without an onboard battery.\n\n**Technical Specifications**\n- **Microcontroller**: Raspberry Pi RP2040 SoC featuring 4MB of flash memory.\n- **Display**: Integrated e-ink driver for permanent, power-free image retention.\n- **Connectivity**: Passive and active NFC modes for data transfer and interaction.\n- **Expansion**: 20 GPIOs broken out to header pins for custom hardware prototyping.\n\n**Design & Manufacturing**\n- **PCB Art**: A two-layer board design featuring symmetrical exposed copper art and ground fills.\n- **Production**: Designed for low-cost manufacturing via services like JLC, with full Gerber and BOM files provided.\n- **Software**: Compatible with the Raspberry Pi Pico MicroPython bootloader and configurable via Thonny.\n\n**Customisation**\n- **Firmware**: Users can modify a JSON configuration file to update personal details.\n- **Graphics**: Supports custom bitmap images that can be converted using standard command-line tools."
-      }
-    },
-    {
       "id": 47645025,
       "title": "Show HN: Contrapunk – Real-time counterpoint harmony from guitar input, in Rust",
       "url": "https://contrapunk.com/",
       "hnUrl": "https://news.ycombinator.com/item?id=47645025",
       "author": "waveywaves",
-      "score": 50,
+      "score": 51,
       "commentCount": 17,
       "submittedAt": "2026-04-05T00:40:18.000Z",
       "summary": {
         "small": "Contrapunk is a Rust-based tool that uses MIDI guitar input to generate real-time species counterpoint harmonies for musical performance.",
         "medium": "Contrapunk is a real-time harmony generator written in Rust that interprets MIDI input from a guitar to create counterpoint melodies. It applies traditional music theory rules to provide instant accompaniment, bridging the gap between historical composition techniques and modern live digital performance.",
         "large": "**Overview**\nContrapunk is a performance tool developed in Rust that generates real-time counterpoint harmonies based on live MIDI input, specifically designed for guitarists. It translates the rigorous rules of species counterpoint into a dynamic system for immediate musical accompaniment.\n\n**Technical implementation**\n- Built using Rust for low-latency audio processing and performance stability during live use.\n- Utilises MIDI data to track the 'cantus firmus' or lead melody played by the musician.\n- Employs a rules engine that calculates valid harmonic responses based on traditional music theory constraints.\n\n**Key features**\n- Supports multiple 'species' of counterpoint, allowing for different rhythmic relationships between the input and the generated melody.\n- Specifically optimised for guitarists, though compatible with any MIDI-capable instrument.\n- Operates in real-time to facilitate improvisational performance rather than offline composition.\n\n**Musical context**\n- Automates the complex process of writing melodies that move independently from the base note while maintaining harmonic coherence.\n- Focuses on diatonic scales, ensuring the generated countermelodies remain tonally consistent with the user's input.\n- Aims to make academic composition techniques accessible for modern digital workflows."
-      }
-    },
-    {
-      "id": 47598835,
-      "title": "Rubysyn: Clarifying Ruby's Syntax and Semantics",
-      "url": "https://github.com/squadette/rubysyn/blob/master/README.md",
-      "hnUrl": "https://news.ycombinator.com/item?id=47598835",
-      "author": "petalmind",
-      "score": 30,
-      "commentCount": 0,
-      "submittedAt": "2026-04-01T09:54:18.000Z",
-      "summary": {
-        "small": "Rubysyn is an experimental project that introduces a Lisp-based syntax to clarify and desugar Ruby's complex syntax and semantics.",
-        "medium": "Rubysyn is an ongoing experiment to simplify Ruby by mapping its semantics to a Lisp-based syntax. By removing syntactic sugar and providing one-to-one representations for features like splats, assignments, and control flow, it aims to create a more parsable and transparent understanding of the language.",
-        "large": "Rubysyn is an experimental project designed to clarify Ruby's intricate syntax and semantics by introducing an alternative Lisp-based representation. The goal is to define a sugar-free, comprehensive syntax that is easier to parse while preserving original Ruby behaviour.\n\n**Key Objectives**\n- To provide a more thorough explanation of Ruby's under-documented corner cases.\n- To establish a one-to-one mapping between Ruby's semantic primitives and a Lisp-like L-expression format.\n- To create a platform for desugaring complex Ruby features into simpler, explicit structures.\n\n**Visualised Features**\n- **Array Handling**: Explicitly differentiates between standard array literals and constructing array splats using specifically defined tags.\n- **Variable Logic**: Breaks down the nuances of single and multi-variable assignment, including the automatic creation of arrays during assignment.\n- **Control Flow**: Replaces varying Ruby keywords with uniform blocks for sequences, conditionals, and loops.\n- **Metaprogramming**: Provides explicit representations for class definitions, singleton classes, and method sending to demystify the role of self and inheritance.\n\n**Implementation Status**\n- The project is currently a work in progress and uses a dedicated specification directory to track progress on various Ruby edge cases and semantic primitives."
       }
     }
   ]
