@@ -1,5 +1,5 @@
 /**
- * Fetch top 10 Hacker News stories and generate AI summaries.
+ * Fetch the most technically interesting Hacker News stories and generate AI summaries.
  * Outputs JSON to data/stories-YYYY-MM-DD.json
  *
  * Usage: pnpm fetch
@@ -11,9 +11,10 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 // Config
 // ---------------------------------------------------------------------------
 
-const GEMINI_MODEL = 'google/gemini-3-flash-preview';
+const OPENROUTER_MODEL = 'google/gemini-3-flash-preview';
 const TIMEOUT_MS = 60_000;
-const STORY_COUNT = 10;
+const STORY_COUNT = Number(process.env.STORY_COUNT ?? 10);
+const CANDIDATE_COUNT = Number(process.env.HN_CANDIDATE_COUNT ?? 40);
 
 // ---------------------------------------------------------------------------
 // Load API key
@@ -42,6 +43,10 @@ interface HNItem {
   descendants?: number; // comment count
   time: number; // Unix timestamp
   type: string;
+}
+
+interface RankedSelection {
+  rankedIds: number[];
 }
 
 export interface SummarySet {
@@ -88,7 +93,7 @@ async function fetchItem(id: number): Promise<HNItem> {
 // OpenRouter
 // ---------------------------------------------------------------------------
 
-const SYSTEM_PROMPT = `You are a concise news summariser for a Hacker News digest site.
+const SUMMARIZER_SYSTEM_PROMPT = `You are a concise news summariser for a Hacker News digest site.
 
 You must produce three summaries of different lengths for each article. Respond with valid JSON only — no markdown fences, no preamble. Use this exact format:
 
@@ -105,7 +110,33 @@ Rules for ALL summaries:
 - Do not include preamble, commentary, or opinions.
 - Use British English spelling.`;
 
-async function callOpenRouter(apiKey: string, prompt: string): Promise<string> {
+const SELECTION_SYSTEM_PROMPT = `You are curating a Hacker News digest for technically sophisticated readers.
+
+Select the stories that are most technically interesting to software engineers, researchers, and technical builders.
+
+Prioritise:
+- programming languages, systems, compilers, databases, networking, security, infrastructure, AI/ML engineering, open source, developer tools, hardware, operating systems, research, deep technical write-ups, and technically substantial Show HN posts
+
+Deprioritise:
+- current affairs, geopolitics, general business news, product marketing, lifestyle content, purely financial stories, generic opinion pieces, job listings, hiring posts, and stories whose main appeal is non-technical
+
+Respond with valid JSON only using this exact format:
+{"rankedIds":[1,2,3]}
+
+Rules:
+- Return exactly 10 ids when at least 10 viable candidates are provided
+- Rank from most technically interesting to least
+- Only use ids from the candidate list
+- Do not include commentary or markdown`;
+
+function cleanJsonResponse(raw: string): string {
+  return raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+}
+
+async function callOpenRouter(
+  apiKey: string,
+  messages: Array<{ role: 'system' | 'user'; content: string }>
+): Promise<string> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
@@ -119,11 +150,8 @@ async function callOpenRouter(apiKey: string, prompt: string): Promise<string> {
         'X-Title': 'HN Summaries',
       },
       body: JSON.stringify({
-        model: `${GEMINI_MODEL}:online`,
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: prompt },
-        ],
+        model: `${OPENROUTER_MODEL}:online`,
+        messages,
       }),
       signal: controller.signal,
     });
@@ -156,10 +184,122 @@ async function summarizeArticle(item: HNItem, apiKey: string): Promise<SummarySe
 Title: ${item.title}
 URL: ${url}`;
 
-  const raw = await callOpenRouter(apiKey, prompt);
-  // Strip markdown code fences if present
-  const cleaned = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+  const raw = await callOpenRouter(apiKey, [
+    { role: 'system', content: SUMMARIZER_SYSTEM_PROMPT },
+    { role: 'user', content: prompt },
+  ]);
+  const cleaned = cleanJsonResponse(raw);
   return JSON.parse(cleaned) as SummarySet;
+}
+
+function extractDomain(url?: string): string {
+  if (!url) return 'news.ycombinator.com';
+
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return 'news.ycombinator.com';
+  }
+}
+
+function isLikelyJobPost(item: HNItem): boolean {
+  const title = item.title.toLowerCase();
+  return (
+    /^ask hn:\s*who is hiring/.test(title) ||
+    /^who is hiring/.test(title) ||
+    /^ask hn:\s*freelancer/.test(title) ||
+    /\b(job|jobs|hiring|hire|seeking work|freelance)\b/.test(title)
+  );
+}
+
+function scoreTechnicalInterestHeuristically(item: HNItem): number {
+  const title = item.title.toLowerCase();
+  const domain = extractDomain(item.url);
+
+  let score = item.score * 0.35 + (item.descendants ?? 0) * 0.45;
+
+  const positivePatterns = [
+    /\b(show hn|ask hn)\b/,
+    /\b(ai|llm|ml|compiler|database|postgres|sqlite|linux|kernel|rust|go|python|javascript|typescript|c\+\+|c\b|wasm|webassembly|security|cryptography|gpu|cpu|benchmark|protocol|http|tcp|dns|distributed|kubernetes|docker|terraform|open source|git|vim|emacs|terminal|api|sdk|library|framework|inference|vector|embedding|microcontroller|embedded|rtos|operating system)\b/,
+  ];
+
+  const negativePatterns = [
+    /\b(trump|president|election|war|ukraine|iran|israel|gaza|china|tariff|senate|congress|court|police|celebrity|sports)\b/,
+    /\b(real estate|mortgage|fashion|diet|dating|travel)\b/,
+  ];
+
+  for (const pattern of positivePatterns) {
+    if (pattern.test(title)) score += 30;
+  }
+
+  for (const pattern of negativePatterns) {
+    if (pattern.test(title)) score -= 35;
+  }
+
+  if (isLikelyJobPost(item)) score -= 1_000;
+
+  if (domain === 'github.com' || domain === 'arxiv.org') score += 20;
+  if (item.url == null && !/^show hn:/i.test(item.title) && !/^ask hn:/i.test(item.title)) score -= 15;
+
+  return score;
+}
+
+async function selectMostTechnicalStories(items: HNItem[], apiKey: string): Promise<HNItem[]> {
+  const filteredItems = items.filter((item) => !isLikelyJobPost(item));
+  const itemsById = new Map(filteredItems.map((item) => [item.id, item]));
+
+  const candidateSummary = filteredItems.map((item) => ({
+    id: item.id,
+    title: item.title,
+    domain: extractDomain(item.url),
+    url: item.url ?? null,
+    score: item.score,
+    commentCount: item.descendants ?? 0,
+    isShowHN: /^show hn:/i.test(item.title),
+    isAskHN: /^ask hn:/i.test(item.title),
+  }));
+
+  const prompt = `Choose the ${STORY_COUNT} most technically interesting stories from these Hacker News candidates.
+
+Candidates:
+${JSON.stringify(candidateSummary, null, 2)}`;
+
+  let rankedIds: number[] = [];
+
+  try {
+    const raw = await callOpenRouter(apiKey, [
+      { role: 'system', content: SELECTION_SYSTEM_PROMPT },
+      { role: 'user', content: prompt },
+    ]);
+    const cleaned = cleanJsonResponse(raw);
+    const parsed = JSON.parse(cleaned) as RankedSelection;
+    rankedIds = Array.isArray(parsed.rankedIds) ? parsed.rankedIds : [];
+  } catch (error: any) {
+    console.warn(`Technical-interest ranking failed, using heuristic fallback: ${error.message}`);
+  }
+
+  const selected: HNItem[] = [];
+  const usedIds = new Set<number>();
+
+  for (const id of rankedIds) {
+    const item = itemsById.get(id);
+    if (!item || usedIds.has(id)) continue;
+    selected.push(item);
+    usedIds.add(id);
+    if (selected.length === STORY_COUNT) return selected;
+  }
+
+  const fallbackItems = filteredItems
+    .filter((item) => !usedIds.has(item.id))
+    .sort((a, b) => scoreTechnicalInterestHeuristically(b) - scoreTechnicalInterestHeuristically(a));
+
+  for (const item of fallbackItems) {
+    selected.push(item);
+    usedIds.add(item.id);
+    if (selected.length === STORY_COUNT) break;
+  }
+
+  return selected;
 }
 
 // ---------------------------------------------------------------------------
@@ -193,20 +333,23 @@ async function main() {
     console.log(`Loaded ${existingById.size} existing stories from data/latest.json\n`);
   }
 
-  console.log('Fetching top Hacker News stories...\n');
+  console.log(`Fetching top ${CANDIDATE_COUNT} Hacker News front-page candidates...\n`);
 
   const topIds = await fetchTopStories();
-  const topNIds = topIds.slice(0, STORY_COUNT);
-  const items: HNItem[] = [];
-  for (const id of topNIds) {
-    items.push(await fetchItem(id));
+  const candidateIds = topIds.slice(0, CANDIDATE_COUNT);
+  const candidateItems = await Promise.all(candidateIds.map((id) => fetchItem(id)));
+  const items = await selectMostTechnicalStories(candidateItems, apiKey);
+
+  console.log(`Selected ${items.length} technically interesting stories from the top ${candidateItems.length} candidates:`);
+  for (const item of items) {
+    console.log(`  - ${item.title} (${item.score} pts, ${extractDomain(item.url)})`);
   }
 
   // Determine which stories are new
   const newItems = items.filter((item) => !existingById.has(item.id));
   const reusedItems = items.filter((item) => existingById.has(item.id));
 
-  console.log(`Top ${STORY_COUNT} stories:`);
+  console.log('');
   for (const item of items) {
     const tag = existingById.has(item.id) ? '(existing)' : '(new)';
     console.log(`  - ${item.title} (${item.score} pts) ${tag}`);
@@ -258,11 +401,8 @@ async function main() {
     console.log('\nNo new stories to summarize.');
   }
 
-  // Merge: current top 10 in order first, then any remaining older stories
+  // Build the current digest from only the freshly selected stories.
   const mergedStories: StorySummary[] = [];
-  const usedIds = new Set<number>();
-
-  // First: the current top 10 in HN rank order
   for (const item of items) {
     const story = newSummaries.get(item.id) ?? existingById.get(item.id);
     if (story) {
@@ -272,17 +412,6 @@ async function main() {
         score: item.score,
         commentCount: item.descendants ?? 0,
       });
-      usedIds.add(item.id);
-    }
-  }
-
-  // Then: older stories that fell off the top 10, preserving their previous order
-  if (existing) {
-    for (const story of existing.stories) {
-      if (!usedIds.has(story.id)) {
-        mergedStories.push(story);
-        usedIds.add(story.id);
-      }
     }
   }
 
@@ -297,7 +426,7 @@ async function main() {
   const filename = `data/stories-${today}.json`;
   writeFileSync(filename, JSON.stringify(output, null, 2));
   console.log(`\nWritten ${mergedStories.length} stories to ${filename}`);
-  console.log(`  (${newItems.length} new, ${reusedItems.length} updated, ${mergedStories.length - items.length} older)`);
+  console.log(`  (${newItems.length} new, ${reusedItems.length} updated)`);
 
   writeFileSync('data/latest.json', JSON.stringify(output, null, 2));
   console.log('Written to data/latest.json');
