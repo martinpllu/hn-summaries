@@ -57,6 +57,30 @@ function renderSummary(text: string): string {
   );
 }
 
+function renderLargeSummary(text: string): string {
+  let html = renderSummary(text);
+
+  // Convert **bold** to <strong>
+  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+  // Split into paragraphs on double newlines
+  const paragraphs = html.split(/\n\n+/);
+  const rendered = paragraphs.map(para => {
+    const lines = para.split('\n');
+    // Check if this paragraph is a bullet list
+    if (lines.every(l => l.trimStart().startsWith('- ') || l.trim() === '')) {
+      const items = lines
+        .filter(l => l.trimStart().startsWith('- '))
+        .map(l => `<li>${l.replace(/^\s*- /, '')}</li>`)
+        .join('');
+      return `<ul>${items}</ul>`;
+    }
+    return `<p>${para.replace(/\n/g, ' ')}</p>`;
+  }).join('');
+
+  return rendered;
+}
+
 function normaliseSummary(summary: SummarySet | string): SummarySet {
   if (typeof summary === 'string') {
     return { small: summary, medium: summary, large: summary };
@@ -115,7 +139,7 @@ function formatDate(dateStr: string): string {
                   <div class="story__summaries">
                     <p class="story__summary" data-size="small" set:html={renderSummary(sum.small)} />
                     <p class="story__summary" data-size="medium" set:html={renderSummary(sum.medium)} />
-                    <p class="story__summary" data-size="large" set:html={renderSummary(sum.large)} />
+                    <div class="story__summary" data-size="large" set:html={renderLargeSummary(sum.large)}></div>
                   </div>
                   <div class="story__meta">
                     <a href={story.hnUrl} rel="noopener" class="story__meta-link">

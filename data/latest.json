@@ -1,15 +1,30 @@
 {
   "date": "2026-04-03",
-  "generatedAt": "2026-04-03T19:54:37.006Z",
+  "generatedAt": "2026-04-03T22:31:17.696Z",
   "stories": [
+    {
+      "id": 47631118,
+      "title": "Artemis II crew take 'spectacular' image of Earth",
+      "url": "https://www.bbc.com/news/articles/ce8jzr423p9o",
+      "hnUrl": "https://news.ycombinator.com/item?id=47631118",
+      "author": "andsoitis",
+      "score": 289,
+      "commentCount": 124,
+      "submittedAt": "2026-04-03T19:35:02.000Z",
+      "summary": {
+        "small": "The Artemis II crew has shared stunning photographs of Earth after successfully completing a critical burn toward the Moon.",
+        "medium": "After a flawless translunar injection burn on Friday, the four Artemis II astronauts captured breathtaking images of the shrinking Earth. Commander Reid Wiseman described the view of the entire globe as spectacular. The crew is now on track to reach the Moon by Monday, setting a new record for human distance from Earth.",
+        "large": "The four-person Artemis II crew has successfully completed a critical engine burn to leave Earth orbit, capturing stunning photographs of the planet as they depart. After spending approximately one day in a high Earth orbit to test systems, the Orion capsule performed a flawless translunar injection (TLI) burn, setting the spacecraft on a trajectory toward the far side of the Moon.\n\n**Mission Progress**\n- The TLI burn lasted five minutes and 50 seconds, adding thousands of kilometres per hour to the spacecraft's speed.\n- As of Friday, the crew was approximately 90,000 miles from Earth with another 168,000 miles left to reach the Moon.\n- The crew consists of Commander Reid Wiseman, Pilot Victor Glover, and Mission Specialists Christina Koch and Jeremy Hansen.\n\n**Key Observations**\n- Commander Wiseman described a 'spectacular' view of the entire globe from pole to pole that paused the crew in their tracks.\n- Images downlinked to NASA show the Earth as a brilliant blue marble with swirling white cloud tendrils.\n- Despite reaching deep space, the crew reported minor technical hurdles, including a faulty toilet that was repaired during flight.\n\n**Historical Significance**\n- This marks the first time humans have left Earth orbit since the final Apollo mission in 1972.\n- The mission is expected to travel roughly 4,700 miles beyond the Moon, likely breaking the distance record set by Apollo 13.\n- While the crew will not land on the lunar surface, the mission serves as a vital precursor to planned landings later this decade."
+      }
+    },
     {
       "id": 47629433,
       "title": "iNaturalist",
       "url": "https://www.inaturalist.org/",
       "hnUrl": "https://news.ycombinator.com/item?id=47629433",
       "author": "bookofjoe",
-      "score": 182,
-      "commentCount": 53,
+      "score": 282,
+      "commentCount": 81,
       "submittedAt": "2026-04-03T17:22:20.000Z",
       "summary": {
         "small": "iNaturalist is a social network for naturalists to share biodiversity observations, map global wildlife, and contribute to scientific research.",
@@ -18,18 +33,123 @@
       }
     },
     {
+      "id": 47632750,
+      "title": "Show HN: TinyOS – A minimalist RTOS for Cortex-M written in C",
+      "url": "https://github.com/cmc-labo/tinyos-rtos",
+      "hnUrl": "https://news.ycombinator.com/item?id=47632750",
+      "author": "hpscript",
+      "score": 13,
+      "commentCount": 2,
+      "submittedAt": "2026-04-03T21:46:26.000Z",
+      "summary": {
+        "small": "TinyOS is a minimalist, preemptive real-time operating system for ARM Cortex-M microcontrollers designed for educational purposes and low-resource environments.",
+        "medium": "TinyOS is a lightweight, preemptive RTOS written in C for ARM Cortex-M microcontrollers. It focuses on simplicity and educational clarity, providing essential multitasking features such as thread management, priority-based scheduling, and blocking semaphores with a minimal memory footprint.",
+        "large": "TinyOS is a minimalist real-time operating system (RTOS) specifically designed for ARM Cortex-M microcontrollers. Developed primarily for educational purposes, it provides a clean, bare-metal implementation in C to help developers understand the internal mechanics of context switching, thread management, and kernel design without the complexity of commercial systems.\n\n**Core Architecture**\n- Implements a preemptive priority-based scheduler that uses the SysTick timer and PendSV handler for context switches.\n- Utilises a linked-list structure for Thread Control Blocks (TCBs) to manage task states and execution flow.\n- Designed specifically for the STM32F3 Discovery board but portable to other Cortex-M4 architectures.\n\n**Key Features**\n- Supports basic thread operations including creation, suspension, sleeping, and termination.\n- Includes blocking semaphores for task synchronisation, avoiding the CPU waste of spin-locks.\n- Maintains a fixed stack size per thread (defaulting to 400 bytes) to ensure predictable RAM usage.\n- Minimalist footprint makes it suitable for resource-constrained embedded environments where flash and RAM are limited."
+      }
+    },
+    {
+      "id": 47586885,
+      "title": "What changes when you turn a Linux box into a router",
+      "url": "https://patrickmccanna.net/7-configuration-changes-that-turn-a-multi-homed-host-into-a-switch-router/",
+      "hnUrl": "https://news.ycombinator.com/item?id=47586885",
+      "author": "0o_MrPatrick_o0",
+      "score": 52,
+      "commentCount": 11,
+      "submittedAt": "2026-03-31T13:13:20.000Z",
+      "summary": {
+        "small": "Transforming a Linux host into a router involves seven core configuration changes, including IP forwarding, bridging, and firewall management.",
+        "medium": "Converting a multi-homed Linux system into a networking appliance requires shifting from a file-centric focus to a process-oriented one. By enabling IP forwarding, defining bridges, and configuring tools like nftables, dnsmasq, and hostapd, users can transform standard hardware into a functional switch, router, or wireless access point.",
+        "large": "Turning a Linux host into a router or switch involves shifting the system's role from a standard end-point to a networking appliance. While hosts typically focus on file system objects, networking devices prioritise real-time packet processing and forwarding. Achieving this transformation requires seven specific configuration adjustments to the Linux kernel and associated services.\n\n**Core System Changes**\n- Activating IP forwarding enables the kernel to process and pass packets between different network interfaces.\n- Defining a bridge allows the system to connect multiple Layer-2 segments into a single broadcast domain.\n- Implementing stateful firewalling with conntrack helps the system track active connections for security and routing accuracy.\n\n**Traffic Management**\n- Activating nftables policies provides the framework for filtering and regulating the flow of network traffic.\n- Defining NAT and Masquerade policies allows multiple internal devices to share a single public IP address via address translation.\n\n**Network Services**\n- Vending DHCP and DNS using dnsmasq automates IP assignment and name resolution for connected clients.\n- Vending WiFi networks with hostapd transforms the system into a wireless access point by managing the radio interface and authentication."
+      }
+    },
+    {
       "id": 47625952,
       "title": "Show HN: I built a frontpage for personal blogs",
       "url": "https://text.blogosphere.app/",
       "hnUrl": "https://news.ycombinator.com/item?id=47625952",
       "author": "ramkarthikk",
-      "score": 519,
-      "commentCount": 146,
+      "score": 595,
+      "commentCount": 166,
       "submittedAt": "2026-04-03T12:33:45.000Z",
       "summary": {
         "small": "Blogosphere is a curated platform designed to preserve the indie web by aggregating and highlighting recent posts from personal blogs.",
         "medium": "Blogosphere is a discovery tool for the indie web, fetching recent content from personal blogs across various categories. It offers two versions: a minimal, Hacker News-inspired static site and a feature-rich version where users can follow specific authors and curate their own reading feeds.",
         "large": "Blogosphere is a newly launched directory and frontpage designed to revitalise the indie web by providing a central hub for personal blog discovery. Created in response to the perceived decline of quality search results and the rise of AI-generated content, the platform manually reviews and indexes human-written blogs across diverse categories such as technology, photography, and design. The service is available in two distinct formats: a 'Minimal' version, which serves as a fast, static, and text-heavy interface inspired by Hacker News, and a 'Non-minimal' version that includes more modern amenities. On the standard site, users can create accounts to follow specific blogs and build a personalised 'For You' feed based on recent updates from their chosen authors. Unlike traditional algorithmic social media, the project aims to stay true to RSS principles by prioritising recent chronological posts from genuine individuals. The developer encourages community participation by allowing bloggers to submit their own sites for review, aiming to bypass the 'SEO hell' of modern search engines and return to a more authentic, hand-curated web experience reminiscent of early webrings and directories."
+      }
+    },
+    {
+      "id": 47631732,
+      "title": "Oracle Files H-1B Visa Petitions Amid Mass Layoffs",
+      "url": "https://nationaltoday.com/us/tx/austin/news/2026/04/03/oracle-files-thousands-of-h-1b-visa-petitions-amid-mass-layoffs/",
+      "hnUrl": "https://news.ycombinator.com/item?id=47631732",
+      "author": "kklisura",
+      "score": 210,
+      "commentCount": 108,
+      "submittedAt": "2026-04-03T20:21:23.000Z",
+      "summary": {
+        "small": "Oracle faces scrutiny for filing thousands of H-1B visa petitions while concurrently laying off approximately 30,000 global employees.",
+        "medium": "Oracle is executing massive global layoffs affecting roughly 30,000 workers, including 12,000 in India, as it pivots toward AI. Despite these cuts, the company has filed over 3,100 H-1B visa petitions for foreign workers, sparking debate over domestic versus foreign hiring practices during corporate restructuring.",
+        "large": "Oracle has initiated a massive global restructuring which involves laying off approximately 30,000 employees, representing nearly 18% of its workforce. The move is driven by a strategic pivot toward artificial intelligence and cloud infrastructure, following significant investments in data centre partnerships. However, the company has faced criticism for simultaneously filing thousands of H-1B visa petitions to bring in foreign labour.\n\n**Layoff Details**\n- Approximately 30,000 positions are being eliminated globally, with reports suggesting up to 12,000 roles may be cut in India alone.\n- Displaced staff were often notified via early-morning emails, losing system access immediately as part of an organisational change.\n- The restructuring is estimated to cost the company up to $1.6 billion in severance and related expenses through fiscal year 2026.\n\n**Visa Controversy**\n- Data reveals Oracle filed 3,126 H-1B visa petitions across the 2025 and 2026 fiscal years, including 436 during the current layoff cycle.\n- The H-1B programme requires employers to demonstrate a lack of qualified domestic candidates, leading to scrutiny regarding these simultaneous filings.\n- Other major tech firms, including Amazon, have reportedly followed similar patterns of high-volume visa sponsorship during workforce reductions.\n\n**Impact on Foreign Workers**\n- Laid-off H-1B holders face a strict 60-day grace period to secure new sponsorship or risk losing their legal residency status in the US.\n- The sudden job losses have created significant pressure on F-1 students and visa-dependent professionals in a tightening tech recruitment market."
+      }
+    },
+    {
+      "id": 47629116,
+      "title": "Go on Embedded Systems and WebAssembly",
+      "url": "https://tinygo.org/",
+      "hnUrl": "https://news.ycombinator.com/item?id=47629116",
+      "author": "uticus",
+      "score": 105,
+      "commentCount": 14,
+      "submittedAt": "2026-04-03T16:57:09.000Z",
+      "summary": {
+        "small": "TinyGo is an LLVM-based compiler bringing the Go programming language to microcontrollers and high-performance WebAssembly applications.",
+        "medium": "TinyGo is a specialised compiler designed to run Go on resource-constrained devices and the web. By leveraging LLVM, it produces significantly smaller binaries than the standard Go compiler, making it compatible with over 100 microcontroller boards and efficient WebAssembly environments.",
+        "large": "TinyGo is an LLVM-based compiler project created to bring the Go programming language to embedded systems and WebAssembly. While the standard Go compiler produce binaries that are often too large for constrained hardware, TinyGo generates compact code suitable for microcontrollers and edge computing. It currently supports over 100 different boards, ranging from educational tools like the BBC micro:bit and Arduino Uno to industrial processors from Nordic Semiconductor and ST Microelectronics.\n\nBeyond hardware, TinyGo is a powerful tool for web development. It compiles Go code into highly efficient WebAssembly modules that can run in browsers or server-side via the WebAssembly System Interface. This allows developers to leverage Go's memory safety and concurrency model while achieving near-native execution speeds. Notable features include a subset of the Go standard library, support for custom JS-to-Go function exports, and deep integration with existing Go tooling. By significantly reducing binary sizes compared to the main Go compiler, TinyGo makes it feasible to deploy Go logic in environments where memory and storage overhead are critical constraints."
+      }
+    },
+    {
+      "id": 47632460,
+      "title": "Charge Robotics (YC S21) Is Hiring Software and Hardware Engineers",
+      "url": "https://jobs.ashbyhq.com/charge-robotics",
+      "hnUrl": "https://news.ycombinator.com/item?id=47632460",
+      "author": "banks_h",
+      "score": 1,
+      "commentCount": 0,
+      "submittedAt": "2026-04-03T21:21:13.000Z",
+      "summary": {
+        "small": "Charge Robotics, a Y Combinator-backed startup building autonomous systems for solar farm construction, is hiring engineers in San Leandro.",
+        "medium": "Charge Robotics is recruiting senior software, mechanical, and field engineers to develop robots that automate solar farm construction. Backed by Y Combinator and Lux Capital, the startup aims to address critical labour shortages in the renewable energy sector by deploying automated hardware at a gigawatt scale.",
+        "large": "Charge Robotics is a Y Combinator-backed startup (S21) based in San Leandro, California, focused on automating the construction of large-scale solar farms. Faced with a massive labour bottleneck in the renewable energy sector, the company develops robotic systems and automated delivery vehicles to accelerate the deployment of clean power. They are currently seeking experienced software and hardware professionals to join their mission-driven team.\n\n**Company Background**\n- Founded by MIT alumni and supported by top-tier investors including Lux Capital, Y Combinator, and Collab Fund.\n- Recently completed their first robotics deployment with SOLV Energy, the largest solar EPC in the United States.\n- Focuses on solving climate change by increasing the speed and efficiency of solar infrastructure installation.\n\n**Current Job Openings**\n- Senior Robotics Software Engineer: Responsible for architecting robotic systems, low-level hardware control, and Python-based software development.\n- Senior Mechanical Engineer: Focused on the design and physical iteration of automated construction hardware.\n- Robotics System Operator (Deployment Engineer): Manages field operations and ensures the successful execution of robotic tasks on-site.\n\n**Technical Requirements**\n- Expertise in Python and familiarity with low-level languages for industrial automation control.\n- Experience with linear actuators, hydraulic systems, motor controllers, and version control/CI pipelines.\n- Strong emphasis on writing correct, testable code for safety-critical hardware environments."
+      }
+    },
+    {
+      "id": 47618223,
+      "title": "We replaced RAG with a virtual filesystem for our AI documentation assistant",
+      "url": "https://www.mintlify.com/blog/how-we-built-a-virtual-filesystem-for-our-assistant",
+      "hnUrl": "https://news.ycombinator.com/item?id=47618223",
+      "author": "denssumesh",
+      "score": 173,
+      "commentCount": 87,
+      "submittedAt": "2026-04-02T18:24:29.000Z",
+      "summary": {
+        "small": "Mintlify replaced traditional RAG with a virtual filesystem and agentic retrieval to improve AI documentation accuracy and context handling.",
+        "medium": "Mintlify has moved away from standard Retrieval-Augmented Generation (RAG) in favour of a virtual filesystem and agentic retrieval. By allowing the LLM to use tool calling to browse documentation like a filesystem, the assistant better understands user intent and retrieves more precise context than keyword-matching allows.",
+        "large": "Mintlify has transitioned its AI documentation assistant from traditional Retrieval-Augmented Generation (RAG) to an architecture powered by agentic retrieval and a virtual filesystem. In standard RAG systems, keyword-matching is used to force-feed specific context to the model, which often leads to incomplete or irrelevant answers if the initial search fails. The new approach treats documentation as a filesystem that the AI can browse dynamically. Using agentic retrieval, the assistant (which leverages Claude 4) is given access to search tools and can decide for itself which parts of the documentation to explore based on the user's intent. This allows the system to clarify vague questions, refine multi-step queries, and provide significantly more accurate responses with citations. This shift matters because documentation is increasingly becoming a primary interface for both humans and AI agents. By providing a 'source of truth' that the AI can navigate intelligently, Mintlify ensures that the answers generated are rooted in up-to-date, structured content. The team also overhauled their feedback pipeline, using ClickHouse to analyse negative interactions and further refine how the assistant handles complex search tasks across various subdomains."
+      }
+    },
+    {
+      "id": 47630576,
+      "title": "How to Make a Sliding, Self-Locking, and Predator-Proof Chicken Coop Door (2020)",
+      "url": "https://www.backyardchickens.com/articles/how-to-make-a-sliding-self-locking-and-predator-proof-chicken-coop-door.75906/",
+      "hnUrl": "https://news.ycombinator.com/item?id=47630576",
+      "author": "uticus",
+      "score": 53,
+      "commentCount": 20,
+      "submittedAt": "2026-04-03T18:54:11.000Z",
+      "summary": {
+        "small": "Build a vertical sliding chicken coop door that uses a clever pulley system to self-lock against predators without manual latches.",
+        "medium": "This DIY guide details how to construct a predator-proof chicken coop door using shelf tracks and a vertical sliding mechanism. The design features an internal self-locking system that engages when lowered, preventing animals from lifting the door from the outside, and can be operated via a simple external string.",
+        "large": "Constructing a secure chicken coop is essential for protecting poultry from nocturnal predators, and this guide provides a blueprint for a vertical sliding, self-locking door. The design focuses on eliminating the need for manual padlocks or latches while ensuring the door cannot be pried open from the bottom by animals. It utilises affordable materials, including laminate shelving for the door panel, closet shelf tracks for the vertical runners, and a robe hook that acts as a gravity-fed locking mechanism. When the door is lowered via an external string, the hook engages internally to secure the panel in place. Key components for the build include a jigsaw, drill, and table saw, alongside hardware like stainless steel screw eyes and hinges. For those seeking higher levels of automation, the fundamental sliding design can be upgraded with motorised winches, 12-volt batteries, and light sensors or timers to facilitate automatic opening at dawn and closing at dusk. This approach balances frugality with high security, offering a robust alternative to standard wooden doors that may rot or plastic versions that lack sufficient strength against determined predators."
       }
     },
     {
@@ -45,51 +165,6 @@
         "small": "Systemd has introduced a birth date field to user records to support emerging global age-verification and parental control laws.",
         "medium": "Systemd now includes an optional birthDate field in its userdb component, responding to new regulations in the US and Brazil. This metadata allows desktop portals and Flatpak apps to implement age-sensitive content controls without giving applications direct access to private user data.",
         "large": "Recent updates to systemd and xdg-desktop-portal have introduced foundational support for age-verification on Linux desktops. Systemd now includes a birthDate field within its JSON-based user records, intended to serve as a system-level source of truth. This change is driven by a series of new international regulations, including laws in California, Colorado, and Brazil, which mandate stricter parental controls and age-gated access for minors. Importantly, systemd itself does not enforce these restrictions; it merely provides the metadata for higher-level components. The proposed workflow involves xdg-desktop-portal acting as a mediator, where sandboxed applications like Flatpaks can request a user's age bracket—such as child, teen, or adult—rather than accessing the full birth date directly. This technical shift has sparked debate within the open-source community regarding privacy and the potential for 'nanny state' oversight. While some developers argue that storing full dates of birth is a security risk, others maintain that provide a standardised backend is necessary for legal compliance. Several projects, including GrapheneOS and Garuda Linux, have voiced resistance, stating they will not implement such measures unless legally compelled to do so."
-      }
-    },
-    {
-      "id": 47618223,
-      "title": "We replaced RAG with a virtual filesystem for our AI documentation assistant",
-      "url": "https://www.mintlify.com/blog/how-we-built-a-virtual-filesystem-for-our-assistant",
-      "hnUrl": "https://news.ycombinator.com/item?id=47618223",
-      "author": "denssumesh",
-      "score": 113,
-      "commentCount": 57,
-      "submittedAt": "2026-04-02T18:24:29.000Z",
-      "summary": {
-        "small": "Mintlify replaced traditional RAG with a virtual filesystem and agentic retrieval to improve AI documentation accuracy and context handling.",
-        "medium": "Mintlify has moved away from standard Retrieval-Augmented Generation (RAG) in favour of a virtual filesystem and agentic retrieval. By allowing the LLM to use tool calling to browse documentation like a filesystem, the assistant better understands user intent and retrieves more precise context than keyword-matching allows.",
-        "large": "Mintlify has transitioned its AI documentation assistant from traditional Retrieval-Augmented Generation (RAG) to an architecture powered by agentic retrieval and a virtual filesystem. In standard RAG systems, keyword-matching is used to force-feed specific context to the model, which often leads to incomplete or irrelevant answers if the initial search fails. The new approach treats documentation as a filesystem that the AI can browse dynamically. Using agentic retrieval, the assistant (which leverages Claude 4) is given access to search tools and can decide for itself which parts of the documentation to explore based on the user's intent. This allows the system to clarify vague questions, refine multi-step queries, and provide significantly more accurate responses with citations. This shift matters because documentation is increasingly becoming a primary interface for both humans and AI agents. By providing a 'source of truth' that the AI can navigate intelligently, Mintlify ensures that the answers generated are rooted in up-to-date, structured content. The team also overhauled their feedback pipeline, using ClickHouse to analyse negative interactions and further refine how the assistant handles complex search tasks across various subdomains."
-      }
-    },
-    {
-      "id": 47630576,
-      "title": "How to Make a Sliding, Self-Locking, and Predator-Proof Chicken Coop Door (2020)",
-      "url": "https://www.backyardchickens.com/articles/how-to-make-a-sliding-self-locking-and-predator-proof-chicken-coop-door.75906/",
-      "hnUrl": "https://news.ycombinator.com/item?id=47630576",
-      "author": "uticus",
-      "score": 18,
-      "commentCount": 3,
-      "submittedAt": "2026-04-03T18:54:11.000Z",
-      "summary": {
-        "small": "Build a vertical sliding chicken coop door that uses a clever pulley system to self-lock against predators without manual latches.",
-        "medium": "This DIY guide details how to construct a predator-proof chicken coop door using shelf tracks and a vertical sliding mechanism. The design features an internal self-locking system that engages when lowered, preventing animals from lifting the door from the outside, and can be operated via a simple external string.",
-        "large": "Constructing a secure chicken coop is essential for protecting poultry from nocturnal predators, and this guide provides a blueprint for a vertical sliding, self-locking door. The design focuses on eliminating the need for manual padlocks or latches while ensuring the door cannot be pried open from the bottom by animals. It utilises affordable materials, including laminate shelving for the door panel, closet shelf tracks for the vertical runners, and a robe hook that acts as a gravity-fed locking mechanism. When the door is lowered via an external string, the hook engages internally to secure the panel in place. Key components for the build include a jigsaw, drill, and table saw, alongside hardware like stainless steel screw eyes and hinges. For those seeking higher levels of automation, the fundamental sliding design can be upgraded with motorised winches, 12-volt batteries, and light sensors or timers to facilitate automatic opening at dawn and closing at dusk. This approach balances frugality with high security, offering a robust alternative to standard wooden doors that may rot or plastic versions that lack sufficient strength against determined predators."
-      }
-    },
-    {
-      "id": 47629116,
-      "title": "Go on Embedded Systems and WebAssembly",
-      "url": "https://tinygo.org/",
-      "hnUrl": "https://news.ycombinator.com/item?id=47629116",
-      "author": "uticus",
-      "score": 54,
-      "commentCount": 8,
-      "submittedAt": "2026-04-03T16:57:09.000Z",
-      "summary": {
-        "small": "TinyGo is an LLVM-based compiler bringing the Go programming language to microcontrollers and high-performance WebAssembly applications.",
-        "medium": "TinyGo is a specialised compiler designed to run Go on resource-constrained devices and the web. By leveraging LLVM, it produces significantly smaller binaries than the standard Go compiler, making it compatible with over 100 microcontroller boards and efficient WebAssembly environments.",
-        "large": "TinyGo is an LLVM-based compiler project created to bring the Go programming language to embedded systems and WebAssembly. While the standard Go compiler produce binaries that are often too large for constrained hardware, TinyGo generates compact code suitable for microcontrollers and edge computing. It currently supports over 100 different boards, ranging from educational tools like the BBC micro:bit and Arduino Uno to industrial processors from Nordic Semiconductor and ST Microelectronics.\n\nBeyond hardware, TinyGo is a powerful tool for web development. It compiles Go code into highly efficient WebAssembly modules that can run in browsers or server-side via the WebAssembly System Interface. This allows developers to leverage Go's memory safety and concurrency model while achieving near-native execution speeds. Notable features include a subset of the Go standard library, support for custom JS-to-Go function exports, and deep integration with existing Go tooling. By significantly reducing binary sizes compared to the main Go compiler, TinyGo makes it feasible to deploy Go logic in environments where memory and storage overhead are critical constraints."
       }
     },
     {

@@ -96,10 +96,12 @@ You must produce three summaries of different lengths for each article. Respond 
 
 - "small": ~20 words. One sentence capturing the core idea.
 - "medium": ~50 words. 2–3 sentences with the key insight and context.
-- "large": ~200 words. A thorough summary covering what it is, why it matters, and notable details.
+- "large": ~200 words. A structured summary using short markdown: start with 1–2 sentences of overview, then use **bold labels** and bullet points (- ) to organise key details. Separate sections with a blank line. Keep bullets concise (one sentence each).
 
 Rules for ALL summaries:
-- NEVER include links, URLs, citations, or source references of any kind. No markdown links, no bare URLs, no [source] tags, no (domain.com) references. Output only plain prose.
+- NEVER include links, URLs, citations, or source references of any kind. No markdown links, no bare URLs, no [source] tags, no (domain.com) references.
+- "small" and "medium" must be plain prose only — no bullets, no markdown formatting.
+- "large" should use markdown bold (**word**) and bullet lists (- item) for structure.
 - Do not include preamble, commentary, or opinions.
 - Use British English spelling.`;
 
